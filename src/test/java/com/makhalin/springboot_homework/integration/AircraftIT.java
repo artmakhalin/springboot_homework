@@ -52,6 +52,7 @@ class AircraftIT {
         entityManager.persist(aircraft);
         aircraft.setModel("Airbus-350");
         entityManager.merge(aircraft);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Aircraft.class, aircraft.getId());
 
@@ -63,6 +64,7 @@ class AircraftIT {
         var aircraft = getBoeing();
         entityManager.persist(aircraft);
         entityManager.remove(aircraft);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Aircraft.class, aircraft.getId());
 

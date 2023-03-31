@@ -25,11 +25,13 @@ public abstract class RepositoryBase<K extends Serializable, E> implements Repos
     @Override
     public void delete(E entity) {
         entityManager.remove(entity);
+        entityManager.flush();
     }
 
     @Override
     public void update(E entity) {
         entityManager.merge(entity);
+        entityManager.flush();
     }
 
     @Override

@@ -68,6 +68,7 @@ class FlightCrewIT extends IntegrationTestBase {
         flightCrew.setClassOfService(ClassOfService.ECONOMY);
         flightCrew.setIsTurnaround(true);
         entityManager.persist(flightCrew);
+        entityManager.flush();
 
         var actualResult = entityManager.find(FlightCrew.class, flightCrew.getId());
 
@@ -83,6 +84,7 @@ class FlightCrewIT extends IntegrationTestBase {
         flightCrew.setFlight(flight);
         entityManager.persist(flightCrew);
         entityManager.remove(flightCrew);
+        entityManager.flush();
 
         var actualResult = entityManager.find(FlightCrew.class, flightCrew.getId());
 

@@ -58,6 +58,7 @@ class CrewIT {
         crew.setMkkDate(LocalDate.of(2023, 10, 10));
         crew.setRole(Role.ADMIN);
         entityManager.merge(crew);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Crew.class, crew.getId());
 
@@ -74,6 +75,7 @@ class CrewIT {
         var crew = getAlex();
         entityManager.persist(crew);
         entityManager.remove(crew);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Crew.class, crew.getId());
 

@@ -52,6 +52,7 @@ class FlightIT extends IntegrationTestBase {
         flight.setTime(3600L);
         flight.setDepartureDate(LocalDate.of(2020, 1, 1));
         entityManager.merge(flight);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Flight.class, flight.getId());
 
@@ -67,6 +68,7 @@ class FlightIT extends IntegrationTestBase {
         var flight = getJfkSea();
         entityManager.persist(flight);
         entityManager.remove(flight);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Flight.class, flight.getId());
 

@@ -63,6 +63,7 @@ class AirportIT {
         entityManager.persist(airport);
         airport.setCity(miami);
         entityManager.merge(airport);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Airport.class, airport.getCode());
 
@@ -75,6 +76,7 @@ class AirportIT {
         var airport = getJfk();
         entityManager.persist(airport);
         entityManager.remove(airport);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Airport.class, airport.getCode());
 

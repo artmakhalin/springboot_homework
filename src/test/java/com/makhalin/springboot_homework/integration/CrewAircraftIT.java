@@ -49,6 +49,7 @@ public class CrewAircraftIT extends IntegrationTestBase {
         entityManager.persist(crewAircraft);
         crewAircraft.setPermitDate(LocalDate.of(2018, 5, 5));
         entityManager.merge(crewAircraft);
+        entityManager.flush();
 
         var actualResult = entityManager.find(CrewAircraft.class, crewAircraft.getId());
 
@@ -60,6 +61,7 @@ public class CrewAircraftIT extends IntegrationTestBase {
         var crewAircraft = getAlexBoeing737();
         entityManager.persist(crewAircraft);
         entityManager.remove(crewAircraft);
+        entityManager.flush();
 
         var actualResult = entityManager.find(CrewAircraft.class, crewAircraft.getId());
 

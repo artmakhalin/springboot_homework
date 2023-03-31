@@ -52,6 +52,7 @@ class CountryIT {
         entityManager.persist(country);
         country.setName("France");
         entityManager.merge(country);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Country.class, country.getId());
 
@@ -63,6 +64,7 @@ class CountryIT {
         var country = getUsa();
         entityManager.persist(country);
         entityManager.remove(country);
+        entityManager.flush();
 
         var actualResult = entityManager.find(Country.class, country.getId());
 

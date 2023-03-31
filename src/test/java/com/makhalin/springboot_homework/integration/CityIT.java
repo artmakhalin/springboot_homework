@@ -61,6 +61,7 @@ class CityIT {
         entityManager.persist(city);
         city.setCountry(france);
         entityManager.merge(city);
+        entityManager.flush();
 
         var actualResult = entityManager.find(City.class, city.getId());
 
@@ -72,6 +73,7 @@ class CityIT {
         var city = getNewYork();
         entityManager.persist(city);
         entityManager.remove(city);
+        entityManager.flush();
 
         var actualResult = entityManager.find(City.class, city.getId());
 
