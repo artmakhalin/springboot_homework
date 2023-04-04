@@ -1,14 +1,7 @@
 package com.makhalin.springboot_homework.repository;
 
 import com.makhalin.springboot_homework.entity.CrewAircraft;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-
-@Repository
-public class CrewAircraftRepository extends RepositoryBase<Long, CrewAircraft> {
-
-    public CrewAircraftRepository(EntityManager entityManager) {
-        super(CrewAircraft.class, entityManager);
-    }
+public interface CrewAircraftRepository extends JpaRepository<CrewAircraft, Long> {
 }

@@ -3,8 +3,8 @@ package com.makhalin.springboot_homework.repository;
 import com.makhalin.springboot_homework.entity.City;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,12 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CityRepositoryTest extends IntegrationTestBase {
 
-    private final CityRepository cityRepository;
-
-    public CityRepositoryTest(EntityManager entityManager, CityRepository cityRepository) {
-        super(entityManager);
-        this.cityRepository = cityRepository;
-    }
+    @Autowired
+    private CityRepository cityRepository;
 
     @Test
     void save() {
@@ -38,13 +34,13 @@ class CityRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         lion.setName("Marsel");
-        cityRepository.update(lion);
+        cityRepository.saveAndFlush(lion);
 
         var actualResult = cityRepository.findById(lion.getId());
 
-        actualResult.ifPresent(
-                actual -> assertThat(actual.getName()).isEqualTo(lion.getName())
-        );
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get()
+                               .getName()).isEqualTo(lion.getName());
     }
 
     @Test
@@ -52,7 +48,7 @@ class CityRepositoryTest extends IntegrationTestBase {
         var actualResult = cityRepository.findById(lion.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(lion));
+        assertThat(actualResult.get()).isEqualTo(lion);
     }
 
     @Test
@@ -80,7 +76,8 @@ class CityRepositoryTest extends IntegrationTestBase {
     void findAllByCrew() {
         var actualResult = cityRepository.findCityAndCountOfVisitsByCrew(alex.getEmail());
         var cityNames = actualResult.stream()
-                                    .map(r -> Objects.requireNonNull(r.get(0, City.class)).getName())
+                                    .map(r -> Objects.requireNonNull(r.get(0, City.class))
+                                                     .getName())
                                     .toList();
         var counts = actualResult.stream()
                                  .map(r -> r.get(1, Long.class))

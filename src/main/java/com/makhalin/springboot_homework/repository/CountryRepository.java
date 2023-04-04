@@ -1,14 +1,7 @@
 package com.makhalin.springboot_homework.repository;
 
 import com.makhalin.springboot_homework.entity.Country;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-
-@Repository
-public class CountryRepository extends RepositoryBase<Integer, Country> {
-
-    public CountryRepository(EntityManager entityManager) {
-        super(Country.class, entityManager);
-    }
+public interface CountryRepository extends JpaRepository<Country, Integer> {
 }

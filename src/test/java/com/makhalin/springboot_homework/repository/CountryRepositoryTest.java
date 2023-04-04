@@ -3,20 +3,15 @@ package com.makhalin.springboot_homework.repository;
 import com.makhalin.springboot_homework.entity.Country;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CountryRepositoryTest extends IntegrationTestBase {
 
-    private final CountryRepository countryRepository;
-
-    public CountryRepositoryTest(EntityManager entityManager, CountryRepository countryRepository) {
-        super(entityManager);
-        this.countryRepository = countryRepository;
-    }
+    @Autowired
+    private CountryRepository countryRepository;
 
     @Test
     void save() {
@@ -37,12 +32,12 @@ class CountryRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         uk.setName("Spain");
-        countryRepository.update(uk);
+        countryRepository.saveAndFlush(uk);
         var actualResult = countryRepository.findById(uk.getId());
 
-        actualResult.ifPresent(
-                actual -> assertThat(actual.getName()).isEqualTo(uk.getName())
-        );
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get()
+                               .getName()).isEqualTo(uk.getName());
     }
 
     @Test
@@ -50,7 +45,7 @@ class CountryRepositoryTest extends IntegrationTestBase {
         var actualResult = countryRepository.findById(uk.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(uk));
+        assertThat(actualResult.get()).isEqualTo(uk);
     }
 
     @Test

@@ -5,8 +5,8 @@ import com.makhalin.springboot_homework.entity.Flight;
 import com.makhalin.springboot_homework.entity.FlightCrew;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class FlightRepositoryTest extends IntegrationTestBase {
 
-    private final FlightRepository flightRepository;
-
-    FlightRepositoryTest(EntityManager entityManager, FlightRepository flightRepository) {
-        super(entityManager);
-        this.flightRepository = flightRepository;
-    }
+    @Autowired
+    private FlightRepository flightRepository;
 
     @Test
     void save() {
@@ -46,15 +42,16 @@ class FlightRepositoryTest extends IntegrationTestBase {
     void update() {
         jfkCdg.setFlightNo("P222");
         jfkCdg.setTime(5555L);
-        flightRepository.update(jfkCdg);
+        flightRepository.saveAndFlush(jfkCdg);
 
         var actualResult = flightRepository.findById(jfkCdg.getId());
 
-        actualResult.ifPresent(
-                actual -> assertAll(
-                        () -> assertThat(actual.getFlightNo()).isEqualTo(jfkCdg.getFlightNo()),
-                        () -> assertThat(actual.getTime()).isEqualTo(jfkCdg.getTime())
-                )
+        assertThat(actualResult).isPresent();
+        assertAll(
+                () -> assertThat(actualResult.get()
+                                             .getFlightNo()).isEqualTo(jfkCdg.getFlightNo()),
+                () -> assertThat(actualResult.get()
+                                             .getTime()).isEqualTo(jfkCdg.getTime())
         );
     }
 
@@ -63,7 +60,7 @@ class FlightRepositoryTest extends IntegrationTestBase {
         var actualResult = flightRepository.findById(jfkCdg.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(jfkCdg));
+        assertThat(actualResult.get()).isEqualTo(jfkCdg);
     }
 
     @Test

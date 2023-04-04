@@ -3,20 +3,16 @@ package com.makhalin.springboot_homework.repository;
 import com.makhalin.springboot_homework.entity.CrewAircraft;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CrewAircraftRepositoryTest extends IntegrationTestBase {
 
-    private final CrewAircraftRepository crewAircraftRepository;
-
-    public CrewAircraftRepositoryTest(EntityManager entityManager, CrewAircraftRepository crewAircraftRepository) {
-        super(entityManager);
-        this.crewAircraftRepository = crewAircraftRepository;
-    }
+    @Autowired
+    private CrewAircraftRepository crewAircraftRepository;
 
     @Test
     void save() {
@@ -37,13 +33,12 @@ class CrewAircraftRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         bobBoeing777.setPermitDate(LocalDate.of(2023, 1, 1));
-        crewAircraftRepository.update(bobBoeing777);
+        crewAircraftRepository.saveAndFlush(bobBoeing777);
 
         var actualResult = crewAircraftRepository.findById(bobBoeing777.getId());
 
-        actualResult.ifPresent(
-                actual -> assertThat(actual.getPermitDate()).isEqualTo(bobBoeing777.getPermitDate())
-        );
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get().getPermitDate()).isEqualTo(bobBoeing777.getPermitDate());
     }
 
     @Test
@@ -51,7 +46,7 @@ class CrewAircraftRepositoryTest extends IntegrationTestBase {
         var actualResult = crewAircraftRepository.findById(bobBoeing777.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(bobBoeing777));
+        assertThat(actualResult.get()).isEqualTo(bobBoeing777);
     }
 
     @Test

@@ -3,20 +3,15 @@ package com.makhalin.springboot_homework.repository;
 import com.makhalin.springboot_homework.entity.Aircraft;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AircraftRepositoryTest extends IntegrationTestBase {
 
-    private final AircraftRepository aircraftRepository;
-
-    public AircraftRepositoryTest(EntityManager entityManager, AircraftRepository aircraftRepository) {
-        super(entityManager);
-        this.aircraftRepository = aircraftRepository;
-    }
+    @Autowired
+    private AircraftRepository aircraftRepository;
 
     @Test
     void save() {
@@ -37,13 +32,14 @@ class AircraftRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         airbus330.setModel("TU-204");
-        aircraftRepository.update(airbus330);
+        aircraftRepository.saveAndFlush(airbus330);
 
         var actualResult = aircraftRepository.findById(airbus330.getId());
 
-        actualResult.ifPresent(
-                actual -> assertThat(actual.getModel()).isEqualTo(airbus330.getModel())
-        );
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get()
+                               .getModel()).isEqualTo(airbus330.getModel());
+
     }
 
     @Test
@@ -51,7 +47,7 @@ class AircraftRepositoryTest extends IntegrationTestBase {
         var actualResult = aircraftRepository.findById(airbus330.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(airbus330));
+        assertThat(actualResult.get()).isEqualTo(airbus330);
     }
 
     @Test

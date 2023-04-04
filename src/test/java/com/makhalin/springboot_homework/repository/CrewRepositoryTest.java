@@ -5,8 +5,8 @@ import com.makhalin.springboot_homework.entity.Crew;
 import com.makhalin.springboot_homework.entity.Role;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 
 import static com.makhalin.springboot_homework.util.TestMocks.CrewAircraftMock.getAlexBoeing737;
@@ -15,12 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CrewRepositoryTest extends IntegrationTestBase {
 
-    private final CrewRepository crewRepository;
-
-    public CrewRepositoryTest(EntityManager entityManager, CrewRepository crewRepository) {
-        super(entityManager);
-        this.crewRepository = crewRepository;
-    }
+    @Autowired
+    private CrewRepository crewRepository;
 
     @Test
     void save() {
@@ -42,16 +38,18 @@ class CrewRepositoryTest extends IntegrationTestBase {
     void update() {
         marta.setFirstname("Diana");
         marta.setEmail("diana@mail.ru");
-        crewRepository.update(marta);
+        crewRepository.saveAndFlush(marta);
 
         var actualResult = crewRepository.findById(marta.getId());
 
-        actualResult.ifPresent(
-                actual -> assertAll(
-                        () -> assertThat(actual.getFirstname()).isEqualTo(marta.getFirstname()),
-                        () -> assertThat(actual.getEmail()).isEqualTo(marta.getEmail())
-                )
+        assertThat(actualResult).isPresent();
+        assertAll(
+                () -> assertThat(actualResult.get()
+                                             .getFirstname()).isEqualTo(marta.getFirstname()),
+                () -> assertThat(actualResult.get()
+                                             .getEmail()).isEqualTo(marta.getEmail())
         );
+
     }
 
     @Test
@@ -59,7 +57,7 @@ class CrewRepositoryTest extends IntegrationTestBase {
         var actualResult = crewRepository.findById(marta.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(marta));
+        assertThat(actualResult.get()).isEqualTo(marta);
     }
 
     @Test

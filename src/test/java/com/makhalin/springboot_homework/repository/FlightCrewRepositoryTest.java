@@ -4,20 +4,15 @@ import com.makhalin.springboot_homework.entity.ClassOfService;
 import com.makhalin.springboot_homework.entity.FlightCrew;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class FlightCrewRepositoryTest extends IntegrationTestBase {
 
-    private final FlightCrewRepository flightCrewRepository;
-
-    FlightCrewRepositoryTest(EntityManager entityManager, FlightCrewRepository flightCrewRepository) {
-        super(entityManager);
-        this.flightCrewRepository = flightCrewRepository;
-    }
+    @Autowired
+    private FlightCrewRepository flightCrewRepository;
 
     @Test
     void save() {
@@ -38,16 +33,17 @@ class FlightCrewRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         ledVogAlex.setClassOfService(ClassOfService.ECONOMY);
-        ledVogAlex.setIsPassenger(true);
-        flightCrewRepository.update(ledVogAlex);
+        ledVogAlex.setPassenger(true);
+        flightCrewRepository.saveAndFlush(ledVogAlex);
 
         var actualResult = flightCrewRepository.findById(ledVogAlex.getId());
 
-        actualResult.ifPresent(
-                actual -> assertAll(
-                        () -> assertThat(actual.getClassOfService()).isEqualTo(ledVogAlex.getClassOfService()),
-                        () -> assertThat(actual.getIsPassenger()).isEqualTo(ledVogAlex.getIsPassenger())
-                )
+        assertThat(actualResult).isPresent();
+        assertAll(
+                () -> assertThat(actualResult.get()
+                                             .getClassOfService()).isEqualTo(ledVogAlex.getClassOfService()),
+                () -> assertThat(actualResult.get()
+                                             .isPassenger()).isEqualTo(ledVogAlex.isPassenger())
         );
     }
 
@@ -56,7 +52,7 @@ class FlightCrewRepositoryTest extends IntegrationTestBase {
         var actualResult = flightCrewRepository.findById(ledVogAlex.getId());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(ledVogAlex));
+        assertThat(actualResult.get()).isEqualTo(ledVogAlex);
     }
 
     @Test

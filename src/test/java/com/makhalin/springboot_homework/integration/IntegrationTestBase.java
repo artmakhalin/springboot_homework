@@ -1,9 +1,9 @@
 package com.makhalin.springboot_homework.integration;
 
+import com.makhalin.springboot_homework.AbstractTestBase;
 import com.makhalin.springboot_homework.entity.*;
-import com.makhalin.springboot_homework.integration.annotation.IT;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 
@@ -15,9 +15,7 @@ import static com.makhalin.springboot_homework.util.TestMocks.CrewAircraftMock.*
 import static com.makhalin.springboot_homework.util.TestMocks.CrewMock.*;
 import static com.makhalin.springboot_homework.util.TestMocks.FlightMock.*;
 
-@IT
-@RequiredArgsConstructor
-public abstract class IntegrationTestBase {
+public abstract class IntegrationTestBase extends AbstractTestBase {
 
     protected Aircraft boeing737 = getBoeing737();
     protected Aircraft boeing777 = getBoeing777();
@@ -58,7 +56,8 @@ public abstract class IntegrationTestBase {
     protected Flight jfkCdg = getJfkCdg();
     protected FlightCrew ledVogAlex;
 
-    protected final EntityManager entityManager;
+    @Autowired
+    protected EntityManager entityManager;
 
     @BeforeEach
     void prepareDatabase() {

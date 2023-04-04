@@ -4,8 +4,7 @@ import com.makhalin.springboot_homework.entity.Airport;
 import com.makhalin.springboot_homework.entity.City;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,12 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AirportRepositoryTest extends IntegrationTestBase {
 
-    private final AirportRepository airportRepository;
-
-    public AirportRepositoryTest(EntityManager entityManager, AirportRepository airportRepository) {
-        super(entityManager);
-        this.airportRepository = airportRepository;
-    }
+    @Autowired
+    private AirportRepository airportRepository;
 
     @Test
     void save() {
@@ -28,7 +23,7 @@ class AirportRepositoryTest extends IntegrationTestBase {
         var actualResult = airportRepository.findById(lga.getCode());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(lga));
+        assertThat(actualResult.get()).isEqualTo(lga);
     }
 
     @Test
@@ -42,13 +37,14 @@ class AirportRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         ewr.setCity(seattle);
-        airportRepository.update(ewr);
+        airportRepository.saveAndFlush(ewr);
 
         var actualResult = airportRepository.findById(ewr.getCode());
 
-        actualResult.ifPresent(
-                actual -> assertThat(actual.getCity()).isEqualTo(ewr.getCity())
-        );
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get()
+                               .getCity()).isEqualTo(ewr.getCity());
+
     }
 
     @Test
@@ -56,7 +52,7 @@ class AirportRepositoryTest extends IntegrationTestBase {
         var actualResult = airportRepository.findById(jfk.getCode());
 
         assertThat(actualResult).isPresent();
-        actualResult.ifPresent(actual -> assertThat(actual).isEqualTo(jfk));
+        assertThat(actualResult.get()).isEqualTo(jfk);
     }
 
     @Test

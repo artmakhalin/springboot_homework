@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset makhalin:1
 CREATE TABLE crew
 (
     id              SERIAL PRIMARY KEY,
@@ -10,27 +13,37 @@ CREATE TABLE crew
     mkk_date        DATE,
     role            VARCHAR(32)         NOT NULL
 );
+
+--changeset makhalin:2
 CREATE TABLE country
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(32) UNIQUE NOT NULL
 );
+
+--changeset makhalin:3
 CREATE TABLE city
 (
     id         SERIAL PRIMARY KEY,
     name       VARCHAR(32) UNIQUE          NOT NULL,
     country_id INT REFERENCES country (id) NOT NULL
 );
+
+--changeset makhalin:4
 CREATE TABLE airport
 (
     code    CHAR(3) PRIMARY KEY,
     city_id INT REFERENCES city (id) NOT NULL
 );
+
+--changeset makhalin:5
 CREATE TABLE aircraft
 (
     id    SERIAL PRIMARY KEY,
     model VARCHAR(32) UNIQUE NOT NULL
 );
+
+--changeset makhalin:6
 CREATE TABLE flight
 (
     id                     BIGSERIAL PRIMARY KEY,
@@ -43,6 +56,8 @@ CREATE TABLE flight
     time                   BIGINT                            NOT NULL
 
 );
+
+--changeset makhalin:7
 CREATE TABLE crew_aircraft
 (
     id          BIGSERIAL PRIMARY KEY,
@@ -50,6 +65,8 @@ CREATE TABLE crew_aircraft
     aircraft_id INT REFERENCES aircraft (id) ON DELETE CASCADE NOT NULL,
     permit_date DATE                                           NOT NULL
 );
+
+--changeset makhalin:8
 CREATE TABLE flight_crew
 (
     id               BIGSERIAL PRIMARY KEY,
