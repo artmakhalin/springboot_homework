@@ -26,3 +26,6 @@ hs_err_pid*
 /.idea/
 /.mvn/
 /springboot_homework.iml
+/src/main/resources/static/
+*.css
+*.js

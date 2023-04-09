@@ -31,7 +31,7 @@ public class FilterCityRepositoryImpl implements FilterCityRepository {
                 .join(airport.arrivalFlights, flight)
                 .join(flight.flightCrews, flightCrew)
                 .join(flightCrew.crew, crew)
-                .where(crew.email.toUpperCase().eq(email.toUpperCase()))
+                .where(crew.email.equalsIgnoreCase(email))
                 .groupBy(city)
                 .orderBy(city.count()
                              .asc())
