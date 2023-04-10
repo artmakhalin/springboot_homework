@@ -152,11 +152,13 @@ public class TestMocks {
     public class CrewMock {
         public static Crew getAlex() {
             return Crew.builder()
-                       .firstname("Alex")
-                       .lastname("Test")
+                       .personalInfo(PersonalInfo.builder()
+                                                 .firstname("Alex")
+                                                 .lastname("Test")
+                                                 .birthDate(LocalDate.of(1995, 1, 1))
+                                                 .build())
                        .email("alex@test.com")
                        .password("test")
-                       .birthDate(LocalDate.of(1995, 1, 1))
                        .employmentDate(LocalDate.of(2015, 12, 5))
                        .role(Role.USER)
                        .build();
@@ -164,11 +166,13 @@ public class TestMocks {
 
         public static Crew getJake() {
             return Crew.builder()
-                       .firstname("Jake")
-                       .lastname("Test")
+                       .personalInfo(PersonalInfo.builder()
+                                                 .firstname("Jake")
+                                                 .lastname("Test")
+                                                 .birthDate(LocalDate.of(1995, 1, 1))
+                                                 .build())
                        .email("jake@test.com")
                        .password("test")
-                       .birthDate(LocalDate.of(1995, 1, 1))
                        .employmentDate(LocalDate.of(2020, 12, 5))
                        .role(Role.USER)
                        .build();
@@ -176,11 +180,13 @@ public class TestMocks {
 
         public static Crew getBob() {
             return Crew.builder()
-                       .firstname("Bob")
-                       .lastname("Test")
+                       .personalInfo(PersonalInfo.builder()
+                                                 .firstname("Bob")
+                                                 .lastname("Test")
+                                                 .birthDate(LocalDate.of(1995, 1, 1))
+                                                 .build())
                        .email("bob@test.com")
                        .password("test")
-                       .birthDate(LocalDate.of(1995, 1, 1))
                        .employmentDate(LocalDate.of(2014, 12, 5))
                        .role(Role.USER)
                        .build();
@@ -188,11 +194,13 @@ public class TestMocks {
 
         public static Crew getMarta() {
             return Crew.builder()
-                       .firstname("Marta")
-                       .lastname("Test")
+                       .personalInfo(PersonalInfo.builder()
+                                                 .firstname("Marta")
+                                                 .lastname("Test")
+                                                 .birthDate(LocalDate.of(1982, 1, 12))
+                                                 .build())
                        .email("marta@test.com")
                        .password("test")
-                       .birthDate(LocalDate.of(1982, 1, 12))
                        .employmentDate(LocalDate.of(1999, 12, 15))
                        .role(Role.USER)
                        .build();

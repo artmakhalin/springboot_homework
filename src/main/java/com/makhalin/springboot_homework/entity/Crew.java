@@ -34,20 +34,13 @@ public class Crew {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private String firstname;
-
-    @Column(nullable = false)
-    private String lastname;
+    private PersonalInfo personalInfo;
 
     @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
-    private LocalDate birthDate;
 
     @Column(nullable = false)
     private LocalDate employmentDate;
