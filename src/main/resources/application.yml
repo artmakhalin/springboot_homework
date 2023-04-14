@@ -15,3 +15,5 @@ spring:
       hbm2ddl.auto: validate
       dialect: org.hibernate.dialect.PostgreSQL10Dialect
     open-in-view: false
+  jackson:
+    constructor-detector: use_properties_based

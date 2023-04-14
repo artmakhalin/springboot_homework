@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <querydsl.version>5.0.0</querydsl.version>
+        <springdoc.version>1.6.6</springdoc.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <clean.plugin.version>3.2.0</clean.plugin.version>
         <compiler.plugin.version>3.10.1</compiler.plugin.version>
@@ -71,6 +72,11 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
