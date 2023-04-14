@@ -1,7 +1,7 @@
 package com.makhalin.springboot_homework.integration.http.controller;
 
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
-import com.makhalin.springboot_homework.mapper.CityReadMapper;
+import com.makhalin.springboot_homework.mapper.CityMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class CityControllerIT extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private CityReadMapper cityReadMapper;
+    private CityMapper cityMapper;
 
     @Test
     @SneakyThrows
@@ -52,7 +52,7 @@ class CityControllerIT extends IntegrationTestBase {
                        status().is2xxSuccessful(),
                        view().name("city/city"),
                        model().attributeExists("city"),
-                       model().attribute("city", equalTo(cityReadMapper.map(newYork)))
+                       model().attribute("city", equalTo(cityMapper.mapRead(newYork)))
                );
     }
 

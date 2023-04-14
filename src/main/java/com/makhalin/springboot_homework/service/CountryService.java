@@ -2,8 +2,7 @@ package com.makhalin.springboot_homework.service;
 
 import com.makhalin.springboot_homework.dto.CountryCreateEditDto;
 import com.makhalin.springboot_homework.dto.CountryReadDto;
-import com.makhalin.springboot_homework.mapper.CountryCreateEditMapper;
-import com.makhalin.springboot_homework.mapper.CountryReadMapper;
+import com.makhalin.springboot_homework.mapper.CountryMapper;
 import com.makhalin.springboot_homework.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,36 +17,35 @@ import java.util.Optional;
 public class CountryService {
 
     private final CountryRepository countryRepository;
-    private final CountryReadMapper countryReadMapper;
-    private final CountryCreateEditMapper countryCreateEditMapper;
+    private final CountryMapper countryMapper;
 
     public List<CountryReadDto> findAll() {
         return countryRepository.findAll()
                                 .stream()
-                                .map(countryReadMapper::map)
+                                .map(countryMapper::mapRead)
                                 .toList();
     }
 
     public Optional<CountryReadDto> findById(Integer id) {
         return countryRepository.findById(id)
-                                .map(countryReadMapper::map);
+                                .map(countryMapper::mapRead);
     }
 
     @Transactional
     public CountryReadDto create(CountryCreateEditDto countryDto) {
         return Optional.of(countryDto)
-                       .map(countryCreateEditMapper::map)
+                       .map(countryMapper::mapCreate)
                        .map(countryRepository::save)
-                       .map(countryReadMapper::map)
+                       .map(countryMapper::mapRead)
                        .orElseThrow();
     }
 
     @Transactional
     public Optional<CountryReadDto> update(Integer id, CountryCreateEditDto countryDto) {
         return countryRepository.findById(id)
-                                .map(entity -> countryCreateEditMapper.map(countryDto, entity))
+                                .map(entity -> countryMapper.mapUpdate(countryDto, entity))
                                 .map(countryRepository::saveAndFlush)
-                                .map(countryReadMapper::map);
+                                .map(countryMapper::mapRead);
     }
 
     @Transactional

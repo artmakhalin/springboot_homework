@@ -3,8 +3,7 @@ package com.makhalin.springboot_homework.service;
 import com.makhalin.springboot_homework.dto.CityCreateEditDto;
 import com.makhalin.springboot_homework.dto.CityFilter;
 import com.makhalin.springboot_homework.dto.CityReadDto;
-import com.makhalin.springboot_homework.mapper.CityCreateEditMapper;
-import com.makhalin.springboot_homework.mapper.CityReadMapper;
+import com.makhalin.springboot_homework.mapper.CityMapper;
 import com.makhalin.springboot_homework.repository.CityRepository;
 import com.makhalin.springboot_homework.repository.QPredicate;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,7 @@ import static com.makhalin.springboot_homework.entity.QCity.city;
 public class CityService {
 
     private final CityRepository cityRepository;
-    private final CityReadMapper cityReadMapper;
-    private final CityCreateEditMapper cityCreateEditMapper;
+    private final CityMapper cityMapper;
 
     public Page<CityReadDto> findAll(CityFilter filter, Pageable pageable) {
         var predicate = QPredicate.builder()
@@ -34,43 +32,43 @@ public class CityService {
                                   .buildAnd();
 
         return cityRepository.findAll(predicate, pageable)
-                .map(cityReadMapper::map);
+                .map(cityMapper::mapRead);
     }
 
     public List<CityReadDto> findAll() {
         return cityRepository.findAll()
                              .stream()
-                             .map(cityReadMapper::map)
+                             .map(cityMapper::mapRead)
                              .toList();
     }
 
     public Optional<CityReadDto> findById(Integer id) {
         return cityRepository.findById(id)
-                             .map(cityReadMapper::map);
+                             .map(cityMapper::mapRead);
     }
 
     public List<CityReadDto> findAllByCountryId(Integer countryId) {
         return cityRepository.findAllByCountryId(countryId)
                              .stream()
-                             .map(cityReadMapper::map)
+                             .map(cityMapper::mapRead)
                              .toList();
     }
 
     @Transactional
     public CityReadDto create(CityCreateEditDto cityDto) {
         return Optional.of(cityDto)
-                       .map(cityCreateEditMapper::map)
+                       .map(cityMapper::mapCreate)
                        .map(cityRepository::save)
-                       .map(cityReadMapper::map)
+                       .map(cityMapper::mapRead)
                        .orElseThrow();
     }
 
     @Transactional
     public Optional<CityReadDto> update(Integer id, CityCreateEditDto cityDto) {
         return cityRepository.findById(id)
-                             .map(entity -> cityCreateEditMapper.map(cityDto, entity))
+                             .map(entity -> cityMapper.mapUpdate(cityDto, entity))
                              .map(cityRepository::saveAndFlush)
-                             .map(cityReadMapper::map);
+                             .map(cityMapper::mapRead);
     }
 
     @Transactional

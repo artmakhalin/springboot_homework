@@ -1,7 +1,7 @@
 package com.makhalin.springboot_homework.integration.http.controller;
 
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
-import com.makhalin.springboot_homework.mapper.CountryReadMapper;
+import com.makhalin.springboot_homework.mapper.CountryMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ class CountryControllerIT extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Autowired
-    private CountryReadMapper countryReadMapper;
+    private CountryMapper countryMapper;
 
     @Test
     @SneakyThrows
@@ -48,7 +48,7 @@ class CountryControllerIT extends IntegrationTestBase {
                        status().is2xxSuccessful(),
                        view().name("country/country"),
                        model().attributeExists("country"),
-                       model().attribute("country", equalTo(countryReadMapper.map(usa))),
+                       model().attribute("country", equalTo(countryMapper.mapRead(usa))),
                        model().attribute("cities", hasSize(2))
                );
     }
