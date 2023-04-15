@@ -46,6 +46,16 @@ class CityRestControllerTest extends IntegrationTestBase {
 
     @Test
     @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCityFound() {
+        mockMvc.perform(get("/api/v1/cities/" + 555))
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("City not found")
+               );
+    }
+
+    @Test
+    @SneakyThrows
     void create() {
         mockMvc.perform(post("/api/v1/cities")
                        .contentType(MediaType.APPLICATION_JSON)
@@ -92,8 +102,39 @@ class CityRestControllerTest extends IntegrationTestBase {
 
     @Test
     @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCityFoundWhenUpdate() {
+        mockMvc.perform(put("/api/v1/cities/" + 555)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(String.format("""
+                                               {
+                                                   "name": "Chicago",
+                                                   "countryId": %d
+                                               }
+                                               """,
+                                       usa.getId()
+                               )
+                       )
+               )
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("City not found")
+               );
+    }
+
+    @Test
+    @SneakyThrows
     void remove() {
         mockMvc.perform(delete("/api/v1/cities/" + lion.getId()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCityFoundWhenRemove() {
+        mockMvc.perform(delete("/api/v1/cities/" + 555))
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("City not found")
+               );
     }
 }

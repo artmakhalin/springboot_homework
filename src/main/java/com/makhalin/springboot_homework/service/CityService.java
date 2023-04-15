@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.makhalin.springboot_homework.entity.QCity.city;
+import static com.makhalin.springboot_homework.exception.BadRequestException.badRequest;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFound;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class CityService {
                                   .buildAnd();
 
         return cityRepository.findAll(predicate, pageable)
-                .map(cityMapper::mapRead);
+                             .map(cityMapper::mapRead);
     }
 
     public List<CityReadDto> findAll() {
@@ -42,9 +45,10 @@ public class CityService {
                              .toList();
     }
 
-    public Optional<CityReadDto> findById(Integer id) {
+    public CityReadDto findById(Integer id) {
         return cityRepository.findById(id)
-                             .map(cityMapper::mapRead);
+                             .map(cityMapper::mapRead)
+                             .orElseThrow(notFound("City not found"));
     }
 
     public List<CityReadDto> findAllByCountryId(Integer countryId) {
@@ -60,26 +64,26 @@ public class CityService {
                        .map(cityMapper::mapCreate)
                        .map(cityRepository::save)
                        .map(cityMapper::mapRead)
-                       .orElseThrow();
+                       .orElseThrow(badRequest("Bad request"));
     }
 
     @Transactional
-    public Optional<CityReadDto> update(Integer id, CityCreateEditDto cityDto) {
+    public CityReadDto update(Integer id, CityCreateEditDto cityDto) {
         return cityRepository.findById(id)
                              .map(entity -> cityMapper.mapUpdate(cityDto, entity))
                              .map(cityRepository::saveAndFlush)
-                             .map(cityMapper::mapRead);
+                             .map(cityMapper::mapRead)
+                             .orElseThrow(notFound("City not found"));
     }
 
     @Transactional
-    public boolean delete(Integer id) {
-        return cityRepository.findById(id)
-                             .map(entity -> {
+    public void delete(Integer id) {
+        cityRepository.findById(id)
+                             .ifPresentOrElse(entity -> {
                                  cityRepository.delete(entity);
                                  cityRepository.flush();
-
-                                 return true;
-                             })
-                             .orElse(false);
+                             }, () -> {
+                                 throw notFoundException("City not found");
+                             });
     }
 }

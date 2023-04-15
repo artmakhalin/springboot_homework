@@ -44,6 +44,16 @@ class CountryRestControllerTest extends IntegrationTestBase {
 
     @Test
     @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCountryFound() {
+        mockMvc.perform(get("/api/v1/countries/" + 555))
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("Country not found")
+               );
+    }
+
+    @Test
+    @SneakyThrows
     void create() {
         mockMvc.perform(post("/api/v1/countries")
                        .contentType(MediaType.APPLICATION_JSON)
@@ -78,8 +88,35 @@ class CountryRestControllerTest extends IntegrationTestBase {
 
     @Test
     @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCountryFoundWhenUpdate() {
+        mockMvc.perform(put("/api/v1/countries/" + 555)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content("""
+                               {
+                                 "name": "Italy"
+                               }
+                               """)
+               )
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("Country not found")
+               );
+    }
+
+    @Test
+    @SneakyThrows
     void remove() {
         mockMvc.perform(delete("/api/v1/countries/" + uk.getId()))
                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldReturnNotFoundStatusIfNoCountryFoundWhenRemove() {
+        mockMvc.perform(delete("/api/v1/countries/" + 555))
+               .andExpectAll(
+                       status().is4xxClientError(),
+                       jsonPath("$.message").value("Country not found")
+               );
     }
 }

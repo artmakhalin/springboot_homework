@@ -4,15 +4,14 @@ import com.makhalin.springboot_homework.dto.CountryCreateEditDto;
 import com.makhalin.springboot_homework.service.CityService;
 import com.makhalin.springboot_homework.service.CountryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/countries")
@@ -31,14 +30,10 @@ public class CountryController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
-        return countryService.findById(id)
-                             .map(country -> {
-                                 model.addAttribute("country", country);
-                                 model.addAttribute("cities", cityService.findAllByCountryId(id));
+        model.addAttribute("country", countryService.findById(id));
+        model.addAttribute("cities", cityService.findAllByCountryId(id));
 
-                                 return "country/country";
-                             })
-                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return "country/country";
     }
 
     @GetMapping("/create")
@@ -49,23 +44,21 @@ public class CountryController {
     }
 
     @PostMapping
-    public String create(@Validated CountryCreateEditDto country) {
+    public String create(@Valid CountryCreateEditDto country) {
         return "redirect:/countries/" + countryService.create(country)
                                                       .getId();
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") Integer id, @Validated CountryCreateEditDto country) {
-        return countryService.update(id, country)
-                             .map(it -> "redirect:/countries/{id}")
-                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public String update(@PathVariable("id") Integer id, @Valid CountryCreateEditDto country) {
+        countryService.update(id, country);
+
+        return "redirect:/countries/{id}";
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Integer id) {
-        if (!countryService.delete(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        countryService.delete(id);
 
         return "redirect:/countries";
     }

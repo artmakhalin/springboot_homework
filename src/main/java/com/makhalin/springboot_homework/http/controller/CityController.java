@@ -7,15 +7,14 @@ import com.makhalin.springboot_homework.service.CityService;
 import com.makhalin.springboot_homework.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/cities")
@@ -36,14 +35,10 @@ public class CityController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
-        return cityService.findById(id)
-                .map(city -> {
-                    model.addAttribute("city", city);
-                    model.addAttribute("countries", countryService.findAll());
+        model.addAttribute("city", cityService.findById(id));
+        model.addAttribute("countries", countryService.findAll());
 
-                    return "city/city";
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return "city/city";
     }
 
     @GetMapping("/create")
@@ -55,22 +50,21 @@ public class CityController {
     }
 
     @PostMapping
-    public String create(@Validated CityCreateEditDto city) {
-        return "redirect:/cities/" + cityService.create(city).getId();
+    public String create(@Valid CityCreateEditDto city) {
+        return "redirect:/cities/" + cityService.create(city)
+                                                .getId();
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") Integer id, @Validated CityCreateEditDto city) {
-        return cityService.update(id, city)
-                .map(it -> "redirect:/cities/{id}")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public String update(@PathVariable("id") Integer id, @Valid CityCreateEditDto city) {
+        cityService.update(id, city);
+
+        return "redirect:/cities/{id}";
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Integer id) {
-        if (!cityService.delete(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        cityService.delete(id);
 
         return "redirect:/cities";
     }

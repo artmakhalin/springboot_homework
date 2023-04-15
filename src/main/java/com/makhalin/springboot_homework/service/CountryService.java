@@ -11,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.makhalin.springboot_homework.exception.BadRequestException.badRequest;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFound;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFoundException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,9 +30,10 @@ public class CountryService {
                                 .toList();
     }
 
-    public Optional<CountryReadDto> findById(Integer id) {
+    public CountryReadDto findById(Integer id) {
         return countryRepository.findById(id)
-                                .map(countryMapper::mapRead);
+                                .map(countryMapper::mapRead)
+                                .orElseThrow(notFound("Country not found"));
     }
 
     @Transactional
@@ -37,26 +42,26 @@ public class CountryService {
                        .map(countryMapper::mapCreate)
                        .map(countryRepository::save)
                        .map(countryMapper::mapRead)
-                       .orElseThrow();
+                       .orElseThrow(badRequest("Bad request"));
     }
 
     @Transactional
-    public Optional<CountryReadDto> update(Integer id, CountryCreateEditDto countryDto) {
+    public CountryReadDto update(Integer id, CountryCreateEditDto countryDto) {
         return countryRepository.findById(id)
                                 .map(entity -> countryMapper.mapUpdate(countryDto, entity))
                                 .map(countryRepository::saveAndFlush)
-                                .map(countryMapper::mapRead);
+                                .map(countryMapper::mapRead)
+                                .orElseThrow(notFound("Country not found"));
     }
 
     @Transactional
-    public boolean delete(Integer id) {
-        return countryRepository.findById(id)
-                                .map(entity -> {
-                                    countryRepository.delete(entity);
-                                    countryRepository.flush();
-
-                                    return true;
-                                })
-                                .orElse(false);
+    public void delete(Integer id) {
+        countryRepository.findById(id)
+                         .ifPresentOrElse(entity -> {
+                             countryRepository.delete(entity);
+                             countryRepository.flush();
+                         }, () -> {
+                             throw notFoundException("Country not found");
+                         });
     }
 }

@@ -6,7 +6,6 @@ import com.makhalin.springboot_homework.service.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,30 +33,27 @@ public class CountryRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CountryReadDto> findById(@PathVariable("id") Integer id) {
-        return countryService.findById(id)
-                             .map(countryDto -> ResponseEntity.ok()
-                                                              .body(countryDto))
-                             .orElseGet(ResponseEntity.notFound()::build);
+        return ResponseEntity.ok()
+                             .body(countryService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<CountryReadDto> create(@Validated @RequestBody CountryCreateEditDto country) {
+    public ResponseEntity<CountryReadDto> create(@Valid @RequestBody CountryCreateEditDto country) {
         return new ResponseEntity<>(countryService.create(country), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CountryReadDto> update(@PathVariable("id") Integer id,
-                                                 @Validated @RequestBody CountryCreateEditDto country) {
-        return countryService.update(id, country)
-                             .map(countryDto -> ResponseEntity.ok()
-                                                              .body(countryDto))
-                             .orElseGet(ResponseEntity.notFound()::build);
+                                                 @Valid @RequestBody CountryCreateEditDto country) {
+        return ResponseEntity.ok()
+                             .body(countryService.update(id, country));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        return countryService.delete(id)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        countryService.delete(id);
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }

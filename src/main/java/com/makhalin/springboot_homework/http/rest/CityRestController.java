@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/cities")
@@ -33,32 +34,27 @@ public class CityRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CityReadDto> findById(@PathVariable("id") Integer id) {
-        return cityService.findById(id)
-                          .map(cityDto -> ResponseEntity.ok()
-                                                        .body(cityDto))
-                          .orElseGet(ResponseEntity.notFound()::build);
+        return ResponseEntity.ok()
+                             .body(cityService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<CityReadDto> create(@Validated @RequestBody CityCreateEditDto city) {
+    public ResponseEntity<CityReadDto> create(@Valid @RequestBody CityCreateEditDto city) {
         return new ResponseEntity<>(cityService.create(city), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CityReadDto> update(@PathVariable("id") Integer id,
-                                              @Validated @RequestBody CityCreateEditDto city) {
-        return cityService.update(id, city)
-                          .map(cityDto -> ResponseEntity.ok()
-                                                        .body(cityDto))
-                          .orElseGet(ResponseEntity.notFound()::build);
+                                              @Valid @RequestBody CityCreateEditDto city) {
+        return ResponseEntity.ok()
+                             .body(cityService.update(id, city));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        return cityService.delete(id)
-                ? ResponseEntity.noContent()
-                                .build()
-                : ResponseEntity.notFound()
-                                .build();
+        cityService.delete(id);
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }

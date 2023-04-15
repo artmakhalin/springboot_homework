@@ -3,13 +3,14 @@ package com.makhalin.springboot_homework.integration.service;
 import com.makhalin.springboot_homework.dto.CityCreateEditDto;
 import com.makhalin.springboot_homework.dto.CityFilter;
 import com.makhalin.springboot_homework.dto.CityReadDto;
+import com.makhalin.springboot_homework.exception.NotFoundException;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import com.makhalin.springboot_homework.service.CityService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CityServiceIT extends IntegrationTestBase {
@@ -25,8 +26,8 @@ class CityServiceIT extends IntegrationTestBase {
 
         var actualResult = cityService.findAll(filter, PageRequest.of(0, 20));
         var cityNames = actualResult.get()
-                                  .map(CityReadDto::getName)
-                                  .toList();
+                                    .map(CityReadDto::getName)
+                                    .toList();
 
         assertAll(
                 () -> assertThat(actualResult.getTotalElements()).isEqualTo(2L),
@@ -62,9 +63,7 @@ class CityServiceIT extends IntegrationTestBase {
     void findById() {
         var actualResult = cityService.findById(seattle.getId());
 
-        assertThat(actualResult).isPresent();
-        assertThat(actualResult.get()
-                               .getName()).isEqualTo(seattle.getName());
+        assertThat(actualResult.getName()).isEqualTo(seattle.getName());
     }
 
     @Test
@@ -98,12 +97,9 @@ class CityServiceIT extends IntegrationTestBase {
 
         var actualResult = cityService.update(volgograd.getId(), cityDto);
 
-        assertThat(actualResult).isPresent();
         assertAll(
-                () -> assertThat(actualResult.get()
-                                             .getName()).isEqualTo(cityDto.getName()),
-                () -> assertThat(actualResult.get()
-                                             .getCountry()
+                () -> assertThat(actualResult.getName()).isEqualTo(cityDto.getName()),
+                () -> assertThat(actualResult.getCountry()
                                              .getId()).isEqualTo(cityDto.getCountryId())
         );
     }
@@ -111,8 +107,8 @@ class CityServiceIT extends IntegrationTestBase {
     @Test
     void delete() {
         assertAll(
-                () -> assertThat(cityService.delete(lion.getId())).isTrue(),
-                () -> assertThat(cityService.delete(555)).isFalse()
+                () -> assertThatNoException().isThrownBy(() -> cityService.delete(lion.getId())),
+                () -> assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> cityService.delete(555))
         );
     }
 }
