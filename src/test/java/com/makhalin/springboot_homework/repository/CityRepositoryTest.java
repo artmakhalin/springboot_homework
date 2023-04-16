@@ -95,6 +95,22 @@ class CityRepositoryTest extends IntegrationTestBase {
         );
     }
 
+    @Test
+    void findAllByCountryId() {
+        var actualResult = cityRepository.findAllByCountryId(russia.getId());
+        var cityNames = actualResult.stream()
+                                    .map(City::getName);
+
+        assertAll(
+                () -> assertThat(actualResult).hasSize(3),
+                () -> assertThat(cityNames).containsExactlyInAnyOrder(
+                        moscow.getName(),
+                        stPetersburg.getName(),
+                        volgograd.getName()
+                )
+        );
+    }
+
     private City getLondon() {
         return City.builder()
                    .name("London")

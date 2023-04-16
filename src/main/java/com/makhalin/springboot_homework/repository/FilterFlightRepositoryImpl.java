@@ -64,7 +64,7 @@ public class FilterFlightRepositoryImpl implements FilterFlightRepository {
     @Override
     public Map<Integer, Long> findMonthlyFlightTimeStatisticsByCrewAndYear(FlightsFilter filter) {
         var predicate = QPredicate.builder()
-                                  .add(filter.getCrewEmail().toUpperCase(), crew.email.toUpperCase()::eq)
+                                  .add(filter.getCrewEmail(), crew.email::equalsIgnoreCase)
                                   .add(filter.getYear(),
                                           year -> flight.departureDate.between(
                                                   LocalDate.of(year, 1, 1),
@@ -94,8 +94,8 @@ public class FilterFlightRepositoryImpl implements FilterFlightRepository {
                 .from(flight)
                 .join(flight.flightCrews, flightCrew)
                 .join(flightCrew.crew, crew)
-                .where(crew.email.toUpperCase()
-                                 .eq(email.toUpperCase()))
+                .where(crew.email
+                        .equalsIgnoreCase(email))
                 .transform(groupBy(flight.aircraft.model).as(sum(flight.time)));
     }
 }

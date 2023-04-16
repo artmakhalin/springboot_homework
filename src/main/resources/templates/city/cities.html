@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cities</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <form action="/cities">
+                        <label for="country">Country:
+                            <input id="country" type="text" name="country" th:value="${filter.country}">
+                        </label>
+                        <label for="city">City:
+                            <input id="city" type="text" name="city" th:value="${filter.city}">
+                        </label>
+                        <div>
+                            <label for="page">Page:
+                                <input id="page" type="number" name="page" th:value="${cities.metadata.page}">
+                            </label>
+                            <label for="size">Size:
+                                <input id="size" type="number" name="size" th:value="${cities.metadata.size}">
+                            </label>
+                        </div>
+                        <button type="submit">Filter</button>
+                    </form>
+                    <br>
+                    <div th:each="city : ${cities.content}">
+                        <a th:href="@{'/cities/' + ${city.id}}" th:text="|${city.id}. ${city.name}|">City</a>
+                    </div>
+                    <br>
+                    <form action="/cities/create">
+                        <button type="submit">Create</button>
+                    </form>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

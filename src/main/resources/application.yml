@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
   datasource:
     url: jdbc:postgresql://localhost:5432/flight_manager
     username: postgres
@@ -10,3 +14,6 @@ spring:
       format_sql: true
       hbm2ddl.auto: validate
       dialect: org.hibernate.dialect.PostgreSQL10Dialect
+    open-in-view: false
+  jackson:
+    constructor-detector: use_properties_based

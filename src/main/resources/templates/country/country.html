@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Country</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <form th:action="@{/countries/{countryId}/update(countryId=${country.id})}" method="post" th:object="${country}">
+                        <label for="name">Name:
+                            <input id="name" type="text" name="name" th:value="*{name}">
+                        </label><br>
+                        <label for="cities">Cities:
+                            <div id="cities" th:each="city : ${cities}">
+                                <a th:href="@{'/cities/' + ${city.id}}" th:text="|${city.id}. ${city.name}|">City</a>
+                            </div>
+                        </label><br>
+                        <button type="submit">Update</button>
+                    </form>
+                    <br>
+                    <form th:action="@{/countries/{countryId}/delete(countryId=${country.id})}" method="post">
+                        <button type="submit">Remove</button>
+                    </form>
+                    <br>
+                    <form action="/countries">
+                        <button type="submit">List of countries</button>
+                    </form>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

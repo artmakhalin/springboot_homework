@@ -2,6 +2,7 @@ package com.makhalin.springboot_homework.repository;
 
 import com.makhalin.springboot_homework.dto.CrewFilter;
 import com.makhalin.springboot_homework.entity.Crew;
+import com.makhalin.springboot_homework.entity.PersonalInfo;
 import com.makhalin.springboot_homework.entity.Role;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,8 @@ class CrewRepositoryTest extends IntegrationTestBase {
 
     @Test
     void update() {
-        marta.setFirstname("Diana");
+        marta.getPersonalInfo()
+             .setFirstname("Diana");
         marta.setEmail("diana@mail.ru");
         crewRepository.saveAndFlush(marta);
 
@@ -45,7 +47,9 @@ class CrewRepositoryTest extends IntegrationTestBase {
         assertThat(actualResult).isPresent();
         assertAll(
                 () -> assertThat(actualResult.get()
-                                             .getFirstname()).isEqualTo(marta.getFirstname()),
+                                             .getPersonalInfo()
+                                             .getFirstname()).isEqualTo(marta.getPersonalInfo()
+                                                                             .getFirstname()),
                 () -> assertThat(actualResult.get()
                                              .getEmail()).isEqualTo(marta.getEmail())
         );
@@ -103,11 +107,13 @@ class CrewRepositoryTest extends IntegrationTestBase {
 
     private Crew getLiza() {
         return Crew.builder()
-                   .firstname("Liza")
-                   .lastname("Test")
+                   .personalInfo(PersonalInfo.builder()
+                                             .firstname("Liza")
+                                             .lastname("Test")
+                                             .birthDate(LocalDate.of(1990, 1, 1))
+                                             .build())
                    .email("liza@test.com")
                    .password("test")
-                   .birthDate(LocalDate.of(1990, 1, 1))
                    .employmentDate(LocalDate.of(2015, 4, 5))
                    .role(Role.USER)
                    .build();

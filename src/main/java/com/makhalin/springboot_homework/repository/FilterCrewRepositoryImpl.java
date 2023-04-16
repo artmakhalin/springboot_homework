@@ -33,7 +33,7 @@ public class FilterCrewRepositoryImpl implements FilterCrewRepository {
 
         var predicate = QPredicate.builder()
                                   .add(LocalDate.ofYearDay(filter.getStartYear(), 1), crew.employmentDate::after)
-                                  .add(filter.getAircraftModel().toUpperCase(), crewAircraft.aircraft.model.toUpperCase()::eq)
+                                  .add(filter.getAircraftModel(), crewAircraft.aircraft.model::equalsIgnoreCase)
                                   .buildAnd();
 
         return new JPAQuery<Crew>(entityManager)
