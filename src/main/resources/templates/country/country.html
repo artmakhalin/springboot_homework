@@ -12,6 +12,8 @@
                 <div class="col-sm">
                 </div>
                 <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
                     <form th:action="@{/countries/{countryId}/update(countryId=${country.id})}" method="post" th:object="${country}">
                         <label for="name">Name:
                             <input id="name" type="text" name="name" th:value="*{name}">
@@ -28,9 +30,6 @@
                         <button type="submit">Remove</button>
                     </form>
                     <br>
-                    <form action="/countries">
-                        <button type="submit">List of countries</button>
-                    </form>
                 </div>
                 <div class="col-sm">
                 </div>

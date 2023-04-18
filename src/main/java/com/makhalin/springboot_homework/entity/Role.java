@@ -1,6 +1,14 @@
 package com.makhalin.springboot_homework.entity;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
 
-    ADMIN, USER
+public enum Role implements GrantedAuthority {
+
+    ADMIN,
+    USER;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

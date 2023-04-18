@@ -12,6 +12,8 @@
                 <div class="col-sm">
                 </div>
                 <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
                     <form action="/cities">
                         <label for="country">Country:
                             <input id="country" type="text" name="country" th:value="${filter.country}">

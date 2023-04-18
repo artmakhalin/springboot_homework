@@ -4,8 +4,12 @@ import java.util.function.Supplier;
 
 public class BadRequestException extends RuntimeException {
 
-    public BadRequestException (String message) {
+    public BadRequestException(String message) {
         super(message);
+    }
+
+    public static BadRequestException badRequestException(String message) {
+        return new BadRequestException(message);
     }
 
     public static Supplier<BadRequestException> badRequest(String message) {

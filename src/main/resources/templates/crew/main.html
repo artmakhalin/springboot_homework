@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Create Country</title>
+        <title>Main</title>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
     </head>
     <body>
@@ -14,13 +14,7 @@
                 <div class="col-sm">
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
-                    <form th:action="@{/countries}" method="post" th:object="${country}">
-                        <label for="name">Name:
-                            <input id="name" type="text" name="name" th:value="*{name}">
-                        </label><br>
-                        <button type="submit">Create</button>
-                    </form>
-                    <br>
+                    <p>Hello!</p>
                 </div>
                 <div class="col-sm">
                 </div>

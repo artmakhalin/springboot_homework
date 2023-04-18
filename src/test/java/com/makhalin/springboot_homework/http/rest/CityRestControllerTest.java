@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -58,6 +59,7 @@ class CityRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void create() {
         mockMvc.perform(post("/api/v1/cities")
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(String.format("""
                                                {
@@ -81,6 +83,7 @@ class CityRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void update() {
         mockMvc.perform(put("/api/v1/cities/" + newYork.getId())
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(String.format("""
                                                {
@@ -104,6 +107,7 @@ class CityRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCityFoundWhenUpdate() {
         mockMvc.perform(put("/api/v1/cities/" + 555)
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(String.format("""
                                                {
@@ -124,14 +128,16 @@ class CityRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void remove() {
-        mockMvc.perform(delete("/api/v1/cities/" + lion.getId()))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/v1/cities/" + lion.getId())
+                       .with(csrf()))
+               .andExpect(status().isNoContent());
     }
 
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCityFoundWhenRemove() {
-        mockMvc.perform(delete("/api/v1/cities/" + 555))
+        mockMvc.perform(delete("/api/v1/cities/" + 555)
+                       .with(csrf()))
                .andExpectAll(
                        status().is4xxClientError(),
                        jsonPath("$.message").value("City not found")

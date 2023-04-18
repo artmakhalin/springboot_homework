@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -56,6 +57,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void create() {
         mockMvc.perform(post("/api/v1/countries")
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
                                {
@@ -72,6 +74,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void update() {
         mockMvc.perform(put("/api/v1/countries/" + usa.getId())
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
                                {
@@ -90,6 +93,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCountryFoundWhenUpdate() {
         mockMvc.perform(put("/api/v1/countries/" + 555)
+                       .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
                                {
@@ -106,14 +110,16 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void remove() {
-        mockMvc.perform(delete("/api/v1/countries/" + uk.getId()))
+        mockMvc.perform(delete("/api/v1/countries/" + uk.getId())
+                       .with(csrf()))
                .andExpect(status().isNoContent());
     }
 
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCountryFoundWhenRemove() {
-        mockMvc.perform(delete("/api/v1/countries/" + 555))
+        mockMvc.perform(delete("/api/v1/countries/" + 555)
+                       .with(csrf()))
                .andExpectAll(
                        status().is4xxClientError(),
                        jsonPath("$.message").value("Country not found")
