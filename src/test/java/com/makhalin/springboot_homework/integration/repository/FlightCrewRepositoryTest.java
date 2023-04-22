@@ -1,8 +1,9 @@
-package com.makhalin.springboot_homework.repository;
+package com.makhalin.springboot_homework.integration.repository;
 
 import com.makhalin.springboot_homework.entity.ClassOfService;
 import com.makhalin.springboot_homework.entity.FlightCrew;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
+import com.makhalin.springboot_homework.repository.FlightCrewRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

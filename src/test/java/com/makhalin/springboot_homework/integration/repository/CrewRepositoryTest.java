@@ -1,10 +1,11 @@
-package com.makhalin.springboot_homework.repository;
+package com.makhalin.springboot_homework.integration.repository;
 
 import com.makhalin.springboot_homework.dto.CrewFilter;
 import com.makhalin.springboot_homework.entity.Crew;
 import com.makhalin.springboot_homework.entity.PersonalInfo;
 import com.makhalin.springboot_homework.entity.Role;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
+import com.makhalin.springboot_homework.repository.CrewRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -62,6 +63,14 @@ class CrewRepositoryTest extends IntegrationTestBase {
 
         assertThat(actualResult).isPresent();
         assertThat(actualResult.get()).isEqualTo(marta);
+    }
+
+    @Test
+    void findByEmail() {
+        var actualResult = crewRepository.findByEmail(alex.getEmail());
+
+        assertThat(actualResult).isPresent();
+        assertThat(actualResult.get()).isEqualTo(alex);
     }
 
     @Test

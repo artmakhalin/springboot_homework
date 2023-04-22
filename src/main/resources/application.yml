@@ -17,3 +17,16 @@ spring:
     open-in-view: false
   jackson:
     constructor-detector: use_properties_based
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 386880557729-lmbpnq9gqe1cggbvv98e8fubkm9tt74k.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: http://localhost:8080/login/oauth2/code/google
+            scope: openid,email,profile
+springdoc:
+  swagger-ui:
+    csrf:
+      enabled: true

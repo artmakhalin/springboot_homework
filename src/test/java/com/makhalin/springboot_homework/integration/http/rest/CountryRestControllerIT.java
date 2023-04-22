@@ -1,4 +1,4 @@
-package com.makhalin.springboot_homework.http.rest;
+package com.makhalin.springboot_homework.integration.http.rest;
 
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import lombok.SneakyThrows;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-class CountryRestControllerTest extends IntegrationTestBase {
+class CountryRestControllerIT extends IntegrationTestBase {
 
     @Autowired
     private MockMvc mockMvc;
@@ -25,7 +25,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void findAll() {
-        mockMvc.perform(get("/api/v1/countries"))
+        mockMvc.perform(get("/api/v1/admin/countries"))
                .andExpectAll(
                        status().is2xxSuccessful(),
                        jsonPath("$.length()").value(4)
@@ -35,7 +35,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void findById() {
-        mockMvc.perform(get("/api/v1/countries/" + usa.getId()))
+        mockMvc.perform(get("/api/v1/admin/countries/" + usa.getId()))
                .andExpectAll(
                        status().is2xxSuccessful(),
                        jsonPath("$.id").value(usa.getId()),
@@ -46,17 +46,17 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCountryFound() {
-        mockMvc.perform(get("/api/v1/countries/" + 555))
+        mockMvc.perform(get("/api/v1/admin/countries/" + 555))
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Country not found")
+                       jsonPath("$.message").value("Country not found with id 555")
                );
     }
 
     @Test
     @SneakyThrows
     void create() {
-        mockMvc.perform(post("/api/v1/countries")
+        mockMvc.perform(post("/api/v1/admin/countries")
                        .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
@@ -73,7 +73,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void update() {
-        mockMvc.perform(put("/api/v1/countries/" + usa.getId())
+        mockMvc.perform(put("/api/v1/admin/countries/" + usa.getId())
                        .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
@@ -92,7 +92,7 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCountryFoundWhenUpdate() {
-        mockMvc.perform(put("/api/v1/countries/" + 555)
+        mockMvc.perform(put("/api/v1/admin/countries/" + 555)
                        .with(csrf())
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
@@ -103,14 +103,14 @@ class CountryRestControllerTest extends IntegrationTestBase {
                )
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Country not found")
+                       jsonPath("$.message").value("Country not found with id 555")
                );
     }
 
     @Test
     @SneakyThrows
     void remove() {
-        mockMvc.perform(delete("/api/v1/countries/" + uk.getId())
+        mockMvc.perform(delete("/api/v1/admin/countries/" + uk.getId())
                        .with(csrf()))
                .andExpect(status().isNoContent());
     }
@@ -118,11 +118,11 @@ class CountryRestControllerTest extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoCountryFoundWhenRemove() {
-        mockMvc.perform(delete("/api/v1/countries/" + 555)
+        mockMvc.perform(delete("/api/v1/admin/countries/" + 555)
                        .with(csrf()))
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Country not found")
+                       jsonPath("$.message").value("Country not found with id 555")
                );
     }
 }

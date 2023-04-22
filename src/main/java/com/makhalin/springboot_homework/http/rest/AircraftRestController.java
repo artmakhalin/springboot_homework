@@ -1,8 +1,8 @@
 package com.makhalin.springboot_homework.http.rest;
 
-import com.makhalin.springboot_homework.dto.CountryCreateEditDto;
-import com.makhalin.springboot_homework.dto.CountryReadDto;
-import com.makhalin.springboot_homework.service.CountryService;
+import com.makhalin.springboot_homework.dto.AircraftCreateEditDto;
+import com.makhalin.springboot_homework.dto.AircraftReadDto;
+import com.makhalin.springboot_homework.service.AircraftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,39 +19,39 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin/countries")
+@RequestMapping("/api/v1/admin/aircraft")
 @RequiredArgsConstructor
-public class CountryRestController {
+public class AircraftRestController {
 
-    private final CountryService countryService;
+    private final AircraftService aircraftService;
 
     @GetMapping
-    public ResponseEntity<List<CountryReadDto>> findAll() {
+    public ResponseEntity<List<AircraftReadDto>> findAll() {
         return ResponseEntity.ok()
-                             .body(countryService.findAll());
+                             .body(aircraftService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CountryReadDto> findById(@PathVariable("id") Integer id) {
+    public ResponseEntity<AircraftReadDto> findById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok()
-                             .body(countryService.findById(id));
+                             .body(aircraftService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<CountryReadDto> create(@Valid @RequestBody CountryCreateEditDto country) {
-        return new ResponseEntity<>(countryService.create(country), HttpStatus.CREATED);
+    public ResponseEntity<AircraftReadDto> create(@Valid @RequestBody AircraftCreateEditDto aircraft) {
+        return new ResponseEntity<>(aircraftService.create(aircraft), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CountryReadDto> update(@PathVariable("id") Integer id,
-                                                 @Valid @RequestBody CountryCreateEditDto country) {
+    public ResponseEntity<AircraftReadDto> update(@PathVariable("id") Integer id,
+                                                  @Valid @RequestBody AircraftCreateEditDto aircraft) {
         return ResponseEntity.ok()
-                             .body(countryService.update(id, country));
+                             .body(aircraftService.update(id, aircraft));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        countryService.delete(id);
+        aircraftService.delete(id);
 
         return ResponseEntity.noContent()
                              .build();

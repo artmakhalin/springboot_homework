@@ -1,7 +1,8 @@
-package com.makhalin.springboot_homework.repository;
+package com.makhalin.springboot_homework.integration.repository;
 
 import com.makhalin.springboot_homework.entity.Country;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
+import com.makhalin.springboot_homework.repository.CountryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

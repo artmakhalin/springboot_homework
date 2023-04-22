@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Crew</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <body>
@@ -12,12 +12,11 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
-            <form th:action="@{/registration}" method="post" th:object="${crew}">
+            <div th:insert="~{fragment :: header}"></div>
+            <div th:insert="~{fragment :: menu}"></div>
+            <form th:action="@{/crew/{crewId}/update(crewId=${crew.id})}" method="post" th:object="${crew}">
                 <label for="email">Email:
                     <input id="email" type="text" name="email" th:value="*{email}">
-                </label><br>
-                <label for="rawPassword">Password:
-                    <input id="rawPassword" type="password" name="rawPassword">
                 </label><br>
                 <label for="firstname">Firstname:
                     <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
@@ -34,7 +33,10 @@
                 <label for="mkkDate">MKK date:
                     <input id="mkkDate" type="date" name="mkkDate" th:value="*{mkkDate}">
                 </label><br>
-                <button type="submit">Register</button>
+                <button type="submit">Update</button>
+            </form>
+            <form th:action="@{/crew/{crewId}/delete(crewId=${crew.id})}" method="post">
+                <button type="submit">Remove</button>
             </form>
         </div>
         <div class="col-sm">

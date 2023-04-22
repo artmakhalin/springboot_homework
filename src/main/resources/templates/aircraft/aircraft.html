@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Main</title>
+        <title>Aircraft</title>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
     </head>
     <body>
@@ -14,15 +14,17 @@
                 <div class="col-sm">
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
-                    <p>Hello!</p>
-                    <div th:if="${#authorization.expression('hasAuthority(''USER'')')}" th:object="${crew}">
-                        <span th:text="|Firstname: *{firstname}|">Firstname</span><br>
-                        <span th:text="|Lastname: *{lastname}|">Lastname</span><br>
-                        <span th:text="|Email: *{email}|">Email</span><br>
-                        <span th:text="|Birthdate: *{birthDate}|">Birthdate</span><br>
-                        <span th:text="|Employment date: *{employmentDate}|">Employment date</span><br>
-                        <span th:if="*{mkkDate != null}" th:text="|MKK date: *{mkkDate}|">MKK date</span><br>
-                    </div>
+                    <form th:action="@{/aircraft/{aircraftId}/update(aircraftId=${aircraft.id})}" method="post" th:object="${aircraft}">
+                        <label for="model">Model:
+                            <input id="model" type="text" name="model" th:value="*{model}">
+                        </label><br>
+                        <button type="submit">Update</button>
+                    </form>
+                    <br>
+                    <form th:action="@{/aircraft/{aircraftId}/delete(aircraftId=${aircraft.id})}" method="post">
+                        <button type="submit">Remove</button>
+                    </form>
+                    <br>
                 </div>
                 <div class="col-sm">
                 </div>

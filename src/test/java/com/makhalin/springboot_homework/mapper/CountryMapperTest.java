@@ -17,10 +17,7 @@ class CountryMapperTest {
 
     @Test
     void mapRead() {
-        var usa = Country.builder()
-                         .id(1)
-                         .name("USA")
-                         .build();
+        var usa = getCountry();
 
         var actualResult = countryMapper.mapRead(usa);
         var expectedResult = new CountryReadDto(1, "USA");
@@ -39,14 +36,18 @@ class CountryMapperTest {
 
     @Test
     void mapUpdate() {
-        var usa = Country.builder()
-                         .id(1)
-                         .name("USA")
-                         .build();
+        var usa = getCountry();
         var dto = new CountryCreateEditDto("Spain");
 
         var actualResult = countryMapper.mapUpdate(dto, usa);
 
         assertThat(actualResult.getName()).isEqualTo(dto.getName());
+    }
+
+    private Country getCountry() {
+        return Country.builder()
+                      .id(1)
+                      .name("USA")
+                      .build();
     }
 }
