@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.makhalin.springboot_homework.dto.CountryCreateEditDto.Fields.name;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,6 +69,7 @@ class CountryControllerIT extends IntegrationTestBase {
     @SneakyThrows
     void create() {
         mockMvc.perform(post("/countries")
+                       .with(csrf())
                        .param(name, "Portugal"))
                .andExpectAll(
                        status().is3xxRedirection(),
@@ -79,18 +81,19 @@ class CountryControllerIT extends IntegrationTestBase {
     @SneakyThrows
     void update() {
         mockMvc.perform(post("/countries/" + usa.getId() + "/update")
+                       .with(csrf())
                        .param(name, "Australia"))
                .andExpectAll(
                        status().is3xxRedirection(),
                        redirectedUrl("/countries/" + usa.getId())
                );
-
     }
 
     @Test
     @SneakyThrows
     void delete() {
-        mockMvc.perform(post("/countries/" + uk.getId() + "/delete"))
+        mockMvc.perform(post("/countries/" + uk.getId() + "/delete")
+                       .with(csrf()))
                .andExpectAll(
                        status().is3xxRedirection(),
                        redirectedUrl("/countries")

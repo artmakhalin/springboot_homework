@@ -14,6 +14,7 @@ import static com.makhalin.springboot_homework.dto.CityFilter.Fields.country;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,6 +72,7 @@ class CityControllerIT extends IntegrationTestBase {
     @SneakyThrows
     void create() {
         mockMvc.perform(post("/cities")
+                       .with(csrf())
                        .param(name, "Miami")
                        .param(countryId, usa.getId()
                                             .toString()))
@@ -84,8 +86,10 @@ class CityControllerIT extends IntegrationTestBase {
     @SneakyThrows
     void update() {
         mockMvc.perform(post("/cities/" + newYork.getId() + "/update")
+                       .with(csrf())
                        .param(name, "Miami")
-                       .param(countryId, usa.getId().toString()))
+                       .param(countryId, usa.getId()
+                                            .toString()))
                .andExpectAll(
                        status().is3xxRedirection(),
                        redirectedUrl("/cities/" + newYork.getId())
@@ -95,10 +99,11 @@ class CityControllerIT extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void delete() {
-        mockMvc.perform(post("/cities/" + lion.getId() + "/delete"))
-                .andExpectAll(
-                        status().is3xxRedirection(),
-                        redirectedUrl("/cities")
-                );
+        mockMvc.perform(post("/cities/" + lion.getId() + "/delete")
+                       .with(csrf()))
+               .andExpectAll(
+                       status().is3xxRedirection(),
+                       redirectedUrl("/cities")
+               );
     }
 }

@@ -12,6 +12,8 @@
                 <div class="col-sm">
                 </div>
                 <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
                     <form th:action="@{/cities}" method="post" th:object="${city}">
                         <label for="name">Name:
                             <input id="name" type="text" name="name" th:value="*{name}">
@@ -28,9 +30,6 @@
                         <button type="submit">Create</button>
                     </form>
                     <br>
-                    <form action="/cities">
-                        <button type="submit">List of cities</button>
-                    </form>
                 </div>
                 <div class="col-sm">
                 </div>

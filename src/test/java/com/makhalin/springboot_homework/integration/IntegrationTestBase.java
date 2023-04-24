@@ -4,6 +4,7 @@ import com.makhalin.springboot_homework.AbstractTestBase;
 import com.makhalin.springboot_homework.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.persistence.EntityManager;
 
@@ -15,6 +16,7 @@ import static com.makhalin.springboot_homework.util.TestMocks.CrewAircraftMock.*
 import static com.makhalin.springboot_homework.util.TestMocks.CrewMock.*;
 import static com.makhalin.springboot_homework.util.TestMocks.FlightMock.*;
 
+@WithMockUser(username = "test@test.com", password = "test", authorities = {"ADMIN"})
 public abstract class IntegrationTestBase extends AbstractTestBase {
 
     protected Aircraft boeing737 = getBoeing737();

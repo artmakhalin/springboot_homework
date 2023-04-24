@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/countries")
+@RequestMapping("/api/v1/admin/countries")
 @RequiredArgsConstructor
 public class CountryRestController {
 

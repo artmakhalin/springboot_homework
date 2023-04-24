@@ -12,6 +12,8 @@
                 <div class="col-sm">
                 </div>
                 <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
                     <div th:each="country : ${countries}">
                         <a th:href="@{'/countries/' + ${country.id}}" th:text="|${country.id}. ${country.name}|">Country</a>
                     </div>

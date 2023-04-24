@@ -158,7 +158,7 @@ public class TestMocks {
                                                  .birthDate(LocalDate.of(1995, 1, 1))
                                                  .build())
                        .email("alex@test.com")
-                       .password("test")
+                       .password("{noop}test")
                        .employmentDate(LocalDate.of(2015, 12, 5))
                        .role(Role.USER)
                        .build();

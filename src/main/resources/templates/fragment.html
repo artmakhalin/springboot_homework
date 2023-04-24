@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragments</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+            <div th:fragment="header">
+                <span th:text="|Current User: ${#authentication.principal.username}|">Username</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+            <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" th:fragment="menu">
+                <form action="/countries">
+                    <button type="submit">Countries</button>
+                </form>
+                <form action="/cities">
+                    <button type="submit">Cities</button>
+                </form>
+                <form action="/crew">
+                    <button type="submit">Crew</button>
+                </form>
+                <form action="/aircraft">
+                    <button type="submit">Aircraft</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+</div>
+<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

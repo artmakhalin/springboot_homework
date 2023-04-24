@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/cities")
+@RequestMapping("/api/v1/admin/cities")
 @RequiredArgsConstructor
 public class CityRestController {
 

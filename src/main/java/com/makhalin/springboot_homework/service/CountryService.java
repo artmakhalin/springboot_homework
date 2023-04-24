@@ -33,7 +33,7 @@ public class CountryService {
     public CountryReadDto findById(Integer id) {
         return countryRepository.findById(id)
                                 .map(countryMapper::mapRead)
-                                .orElseThrow(notFound("Country not found"));
+                                .orElseThrow(notFound("Country not found with id " + id));
     }
 
     @Transactional
@@ -42,7 +42,7 @@ public class CountryService {
                        .map(countryMapper::mapCreate)
                        .map(countryRepository::save)
                        .map(countryMapper::mapRead)
-                       .orElseThrow(badRequest("Bad request"));
+                       .orElseThrow(badRequest("Error during save country"));
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class CountryService {
                                 .map(entity -> countryMapper.mapUpdate(countryDto, entity))
                                 .map(countryRepository::saveAndFlush)
                                 .map(countryMapper::mapRead)
-                                .orElseThrow(notFound("Country not found"));
+                                .orElseThrow(notFound("Country not found with id " + id));
     }
 
     @Transactional
@@ -61,7 +61,7 @@ public class CountryService {
                              countryRepository.delete(entity);
                              countryRepository.flush();
                          }, () -> {
-                             throw notFoundException("Country not found");
+                             throw notFoundException("Country not found with id " + id);
                          });
     }
 }

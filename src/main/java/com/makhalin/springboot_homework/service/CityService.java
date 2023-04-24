@@ -48,7 +48,7 @@ public class CityService {
     public CityReadDto findById(Integer id) {
         return cityRepository.findById(id)
                              .map(cityMapper::mapRead)
-                             .orElseThrow(notFound("City not found"));
+                             .orElseThrow(notFound("City not found with id " + id));
     }
 
     public List<CityReadDto> findAllByCountryId(Integer countryId) {
@@ -64,7 +64,7 @@ public class CityService {
                        .map(cityMapper::mapCreate)
                        .map(cityRepository::save)
                        .map(cityMapper::mapRead)
-                       .orElseThrow(badRequest("Bad request"));
+                       .orElseThrow(badRequest("Error during save city"));
     }
 
     @Transactional
@@ -73,7 +73,7 @@ public class CityService {
                              .map(entity -> cityMapper.mapUpdate(cityDto, entity))
                              .map(cityRepository::saveAndFlush)
                              .map(cityMapper::mapRead)
-                             .orElseThrow(notFound("City not found"));
+                             .orElseThrow(notFound("City not found with id " + id));
     }
 
     @Transactional
@@ -83,7 +83,7 @@ public class CityService {
                                  cityRepository.delete(entity);
                                  cityRepository.flush();
                              }, () -> {
-                                 throw notFoundException("City not found");
+                                 throw notFoundException("City not found with id " + id);
                              });
     }
 }
