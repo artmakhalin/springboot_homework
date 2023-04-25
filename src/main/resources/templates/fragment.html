@@ -13,23 +13,34 @@
         </div>
         <div class="col-sm">
             <div th:fragment="header">
-                <span th:text="|Current User: ${#authentication.principal.username}|">Username</span>
+                <span th:text="|#{fragment.user}: ${#authentication.principal.username}|"></span>
                 <form th:action="@{/logout}" method="post">
-                    <button type="submit">Logout</button>
+                    <button type="submit" th:text="#{fragment.logout}"></button>
                 </form>
+                <div th:insert="~{fragment :: locale}"></div>
             </div>
             <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" th:fragment="menu">
                 <form action="/countries">
-                    <button type="submit">Countries</button>
+                    <button type="submit" th:text="#{admin.countries}"></button>
                 </form>
                 <form action="/cities">
-                    <button type="submit">Cities</button>
+                    <button type="submit" th:text="#{admin.cities}"></button>
                 </form>
                 <form action="/crew">
-                    <button type="submit">Crew</button>
+                    <button type="submit" th:text="#{admin.crew}"></button>
                 </form>
                 <form action="/aircraft">
-                    <button type="submit">Aircraft</button>
+                    <button type="submit" th:text="#{admin.aircraft}"></button>
+                </form>
+            </div>
+            <div th:fragment="locale">
+                <form action="">
+                    <label for="lang" th:text="#{fragment.lang}"></label>
+                    <select name="lang" id="lang"  onchange="this.form.submit()">
+                        <option></option>
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                    </select>
                 </form>
             </div>
         </div>

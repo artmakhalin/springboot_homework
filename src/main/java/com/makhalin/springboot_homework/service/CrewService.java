@@ -35,11 +35,7 @@ public class CrewService implements UserDetailsService {
 
     @Transactional
     public CrewReadDto create(CrewCreateEditDto crewDto) {
-        if (crewDto.getEmploymentDate()
-                   .isBefore(crewDto.getBirthDate()
-                                    .plusYears(18))) {
-            throw badRequestException("Employee must be 18 years old");
-        }
+        validateCrewEmploymentDate(crewDto);
         return Optional.of(crewDto)
                        .map(crewMapper::mapCreate)
                        .map(crewRepository::save)
@@ -83,11 +79,7 @@ public class CrewService implements UserDetailsService {
 
     @Transactional
     public CrewReadDto update(Integer id, CrewCreateEditDto crewDto) {
-        if (crewDto.getEmploymentDate()
-                   .isBefore(crewDto.getBirthDate()
-                                    .plusYears(18))) {
-            throw badRequestException("Employee must be 18 years old");
-        }
+        validateCrewEmploymentDate(crewDto);
         return crewRepository.findById(id)
                 .map(entity -> crewMapper.mapUpdate(crewDto, entity))
                 .map(crewRepository::saveAndFlush)
@@ -104,5 +96,13 @@ public class CrewService implements UserDetailsService {
                 }, () -> {
                     throw notFoundException("Crew not found with id " + id);
                 });
+    }
+
+    private void validateCrewEmploymentDate(CrewCreateEditDto crewDto) {
+        if (crewDto.getEmploymentDate()
+                   .isBefore(crewDto.getBirthDate()
+                                    .plusYears(18))) {
+            throw badRequestException("Employee must be 18 years old");
+        }
     }
 }

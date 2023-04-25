@@ -14,14 +14,14 @@
                 <div class="col-sm">
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
-                    <p>Hello!</p>
+                    <span th:text="|#{main.welcome}!|"></span>
                     <div th:if="${#authorization.expression('hasAuthority(''USER'')')}" th:object="${crew}">
-                        <span th:text="|Firstname: *{firstname}|">Firstname</span><br>
-                        <span th:text="|Lastname: *{lastname}|">Lastname</span><br>
-                        <span th:text="|Email: *{email}|">Email</span><br>
-                        <span th:text="|Birthdate: *{birthDate}|">Birthdate</span><br>
-                        <span th:text="|Employment date: *{employmentDate}|">Employment date</span><br>
-                        <span th:if="*{mkkDate != null}" th:text="|MKK date: *{mkkDate}|">MKK date</span><br>
+                        <span th:text="|#{crew.firstname}: *{firstname}|"></span><br>
+                        <span th:text="|#{crew.lastname}: *{lastname}|"></span><br>
+                        <span th:text="|#{crew.email}: *{email}|"></span><br>
+                        <span th:text="|#{crew.birthdate}: *{birthDate}|"></span><br>
+                        <span th:text="|#{crew.employmentDate}: *{employmentDate}|"></span><br>
+                        <span th:if="*{mkkDate != null}" th:text="|#{crew.mkkDate}: *{mkkDate}|"></span><br>
                     </div>
                 </div>
                 <div class="col-sm">

@@ -15,10 +15,10 @@
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
                     <form th:action="@{/aircraft}" method="post" th:object="${aircraft}">
-                        <label for="model">Model:
+                        <label for="model"><span th:text="|#{aircraft.model}:|"></span>
                             <input id="model" type="text" name="model" th:value="*{model}">
                         </label><br>
-                        <button type="submit">Create</button>
+                        <button type="submit" th:text="#{action.create}"></button>
                     </form>
                     <br>
                 </div>

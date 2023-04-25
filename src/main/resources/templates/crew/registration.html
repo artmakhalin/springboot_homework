@@ -12,29 +12,30 @@
         <div class="col-sm">
         </div>
         <div class="col-sm">
+            <div th:insert="~{fragment :: locale}"></div>
             <form th:action="@{/registration}" method="post" th:object="${crew}">
-                <label for="email">Email:
+                <label for="email"><span th:text="|#{crew.email}:|"></span>
                     <input id="email" type="text" name="email" th:value="*{email}">
                 </label><br>
-                <label for="rawPassword">Password:
+                <label for="rawPassword"><span th:text="|#{login.password}:|"></span>
                     <input id="rawPassword" type="password" name="rawPassword">
                 </label><br>
-                <label for="firstname">Firstname:
+                <label for="firstname"><span th:text="|#{crew.firstname}:|"></span>
                     <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
                 </label><br>
-                <label for="lastname">Lastname:
+                <label for="lastname"><span th:text="|#{crew.lastname}:|"></span>
                     <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
                 </label><br>
-                <label for="birthDate">Birth date:
+                <label for="birthDate"><span th:text="|#{crew.birthdate}:|"></span>
                     <input id="birthDate" type="date" name="birthDate" th:value="*{birthDate}">
                 </label><br>
-                <label for="employmentDate">Employment date:
+                <label for="employmentDate"><span th:text="|#{crew.employmentDate}:|"></span>
                     <input id="employmentDate" type="date" name="employmentDate" th:value="*{employmentDate}">
                 </label><br>
-                <label for="mkkDate">MKK date:
+                <label for="mkkDate"><span th:text="|#{crew.mkkDate}:|"></span>
                     <input id="mkkDate" type="date" name="mkkDate" th:value="*{mkkDate}">
                 </label><br>
-                <button type="submit">Register</button>
+                <button type="submit" th:text="#{registration.register}"></button>
             </form>
         </div>
         <div class="col-sm">
