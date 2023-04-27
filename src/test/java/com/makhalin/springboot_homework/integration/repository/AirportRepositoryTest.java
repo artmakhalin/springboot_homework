@@ -90,6 +90,17 @@ class AirportRepositoryTest extends IntegrationTestBase {
         assertThat(cities).containsExactlyInAnyOrder(newYork.getName(), seattle.getName());
     }
 
+    @Test
+    void findAllByCityId() {
+        var actualResult = airportRepository.findAllByCityId(newYork.getId());
+        var airports = actualResult.stream()
+                                   .map(Airport::getCode)
+                                   .toList();
+
+        assertThat(actualResult).hasSize(2);
+        assertThat(airports).containsExactlyInAnyOrder(jfk.getCode(), ewr.getCode());
+    }
+
     private Airport getLga() {
         return Airport.builder()
                       .code("LGA")

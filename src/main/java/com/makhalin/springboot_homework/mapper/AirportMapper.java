@@ -1,7 +1,7 @@
 package com.makhalin.springboot_homework.mapper;
 
-import com.makhalin.springboot_homework.dto.AircraftReadDto;
 import com.makhalin.springboot_homework.dto.AirportCreateEditDto;
+import com.makhalin.springboot_homework.dto.AirportReadDto;
 import com.makhalin.springboot_homework.entity.Airport;
 import com.makhalin.springboot_homework.repository.CityRepository;
 import org.mapstruct.Mapper;
@@ -21,7 +21,7 @@ public abstract class AirportMapper {
                             .orElse(null))
             """;
 
-    public abstract AircraftReadDto mapRead(Airport object);
+    public abstract AirportReadDto mapRead(Airport object);
 
     @Mapping(target = "city", expression = GET_CITY)
     public abstract Airport mapCreate(AirportCreateEditDto object);
