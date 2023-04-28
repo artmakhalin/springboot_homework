@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Country</title>
+        <title>Airport</title>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
     </head>
     <body>
@@ -14,21 +14,24 @@
                 <div class="col-sm">
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
-                    <form th:action="@{/countries/{countryId}/update(countryId=${country.id})}" method="post" th:object="${country}">
-                        <label for="name"><span th:text="|#{country.country}:|"></span>
-                            <input id="name" type="text" name="name" th:value="*{name}">
+                    <form th:action="@{/airports/{airportId}/update(airportId=${airport.id})}" method="post" th:object="${airport}">
+                        <label for="code"><span th:text="|#{airport.code}:|"></span>
+                            <input id="code" type="text" name="code" th:value="*{code}">
                         </label><br>
-                        <div th:if="${cities.size > 0}">
-                            <label for="cities"><span th:text="|#{admin.cities}:|"></span>
-                                <div id="cities" th:each="city : ${cities}">
-                                    <a th:href="@{'/cities/' + ${city.id}}" th:text="|${city.id}. ${city.name}|">City</a>
-                                </div>
-                            </label><br>
+                        <div>
+                            <label for="city"><span th:text="|#{city.city}:|"></span>
+                                <select name="cityId" id="city">
+                                    <option th:each="city : ${cities}"
+                                            th:value="${city.id}"
+                                            th:selected="${city.id == airport.city.id}"
+                                            th:text="${city.name}">City</option>
+                                </select>
+                            </label>
                         </div>
                         <button type="submit" th:text="#{action.update}"></button>
                     </form>
                     <br>
-                    <form th:action="@{/countries/{countryId}/delete(countryId=${country.id})}" method="post">
+                    <form th:action="@{/airports/{airportId}/delete(airportId=${airport.id})}" method="post">
                         <button type="submit" th:text="#{action.remove}"></button>
                     </form>
                     <br>

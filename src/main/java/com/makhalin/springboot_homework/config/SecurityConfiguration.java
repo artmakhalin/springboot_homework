@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .antMatchers(
                                 "/api/v1/admin/**",
                                 "/cities/**",
+                                "/airports/**",
                                 "/aircraft/**",
                                 "/countries/**",
                                 "/crew/**"

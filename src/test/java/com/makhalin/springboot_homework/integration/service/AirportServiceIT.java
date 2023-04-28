@@ -19,19 +19,19 @@ public class AirportServiceIT extends IntegrationTestBase {
     private AirportService airportService;
 
     @Test
-    void findAll() {
+    void findAllByAirportFilter() {
         var filter = AirportFilter.builder()
                                   .country("usa")
                                   .build();
 
         var actualResult = airportService.findAll(filter, PageRequest.of(0, 20));
-        var airports = actualResult.get()
-                                   .map(AirportReadDto::getCode)
-                                   .toList();
+        var airportCodes = actualResult.get()
+                                       .map(AirportReadDto::getCode)
+                                       .toList();
 
         assertAll(
                 () -> assertThat(actualResult.getTotalElements()).isEqualTo(3L),
-                () -> assertThat(airports).containsExactlyInAnyOrder(
+                () -> assertThat(airportCodes).containsExactlyInAnyOrder(
                         jfk.getCode(),
                         sea.getCode(),
                         ewr.getCode()
@@ -40,16 +40,37 @@ public class AirportServiceIT extends IntegrationTestBase {
     }
 
     @Test
-    void findByCode() {
-        var actualResult = airportService.findByCode(jfk.getCode());
+    void findAll() {
+        var actualResult = airportService.findAll();
+        var airportCodes = actualResult.stream()
+                                       .map(AirportReadDto::getCode)
+                                       .toList();
+
+        assertAll(
+                () -> assertThat(actualResult).hasSize(7),
+                () -> assertThat(airportCodes).containsExactlyInAnyOrder(
+                        jfk.getCode(),
+                        ewr.getCode(),
+                        sea.getCode(),
+                        svo.getCode(),
+                        led.getCode(),
+                        vog.getCode(),
+                        cdg.getCode()
+                )
+        );
+    }
+
+    @Test
+    void findById() {
+        var actualResult = airportService.findById(jfk.getId());
 
         assertThat(actualResult.getCode()).isEqualTo(jfk.getCode());
     }
 
     @Test
-    void shouldThrowNotFoundExceptionIfNoAirportByCode() {
+    void shouldThrowNotFoundExceptionIfNoAirportById() {
         assertThatExceptionOfType(NotFoundException.class)
-                .isThrownBy(() -> airportService.findByCode("XXX"));
+                .isThrownBy(() -> airportService.findById(555));
     }
 
     @Test
@@ -73,29 +94,28 @@ public class AirportServiceIT extends IntegrationTestBase {
         var airportDto = new AirportCreateEditDto("LGA", newYork.getId());
 
         var actualResult = airportService.create(airportDto);
-        var expectedResult = airportService.findByCode("LGA");
 
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult.getId()).isNotNull();
     }
 
-//    @Test
-//    void update() {
-//        var airportDto = new AirportCreateEditDto("LGA", newYork.getId());
-//
-//        var actualResult = airportService.update("SEA", airportDto);
-//
-//        assertAll(
-//                () -> assertThat(actualResult.getCode()).isEqualTo(airportDto.getCode()),
-//                () -> assertThat(actualResult.getCity()
-//                                             .getId()).isEqualTo(airportDto.getCityId())
-//        );
-//    }
+    @Test
+    void update() {
+        var airportDto = new AirportCreateEditDto("LGA", newYork.getId());
+
+        var actualResult = airportService.update(sea.getId(), airportDto);
+
+        assertAll(
+                () -> assertThat(actualResult.getCode()).isEqualTo(airportDto.getCode()),
+                () -> assertThat(actualResult.getCity()
+                                             .getId()).isEqualTo(airportDto.getCityId())
+        );
+    }
 
     @Test
     void delete() {
         assertAll(
-                () -> assertThatNoException().isThrownBy(() -> airportService.delete(ewr.getCode())),
-                () -> assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> airportService.delete("XXX"))
+                () -> assertThatNoException().isThrownBy(() -> airportService.delete(ewr.getId())),
+                () -> assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> airportService.delete(555))
         );
     }
 }

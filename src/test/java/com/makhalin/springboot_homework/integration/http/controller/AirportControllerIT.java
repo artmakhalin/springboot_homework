@@ -1,16 +1,16 @@
 package com.makhalin.springboot_homework.integration.http.controller;
 
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
-import com.makhalin.springboot_homework.mapper.CityMapper;
+import com.makhalin.springboot_homework.mapper.AirportMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.makhalin.springboot_homework.dto.CityCreateEditDto.Fields.countryId;
-import static com.makhalin.springboot_homework.dto.CityCreateEditDto.Fields.name;
-import static com.makhalin.springboot_homework.dto.CityFilter.Fields.country;
+import static com.makhalin.springboot_homework.dto.AirportCreateEditDto.Fields.cityId;
+import static com.makhalin.springboot_homework.dto.AirportCreateEditDto.Fields.code;
+import static com.makhalin.springboot_homework.dto.AirportFilter.Fields.country;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -24,88 +24,86 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @AutoConfigureMockMvc
-class CityControllerIT extends IntegrationTestBase {
+class AirportControllerIT extends IntegrationTestBase {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private CityMapper cityMapper;
+    private AirportMapper airportMapper;
 
     @Test
     @SneakyThrows
     void findAll() {
-        mockMvc.perform(get("/cities")
+        mockMvc.perform(get("/airports")
                        .param(country, "usa"))
                .andExpectAll(
                        status().is2xxSuccessful(),
-                       view().name("city/cities"),
-                       model().attributeExists("cities"),
-                       model().attribute("cities", hasProperty("content", hasSize(2)))
+                       view().name("airport/airports"),
+                       model().attributeExists("airports"),
+                       model().attribute("airports", hasProperty("content", hasSize(3)))
                );
     }
 
     @Test
     @SneakyThrows
     void findById() {
-        mockMvc.perform(get("/cities/" + newYork.getId()))
+        mockMvc.perform(get("/airports/" + jfk.getId()))
                .andExpectAll(
                        status().is2xxSuccessful(),
-                       view().name("city/city"),
-                       model().attributeExists("city"),
-                       model().attribute("city", equalTo(cityMapper.mapRead(newYork))),
-                       model().attributeExists("airports"),
-                       model().attribute("airports", hasSize(2))
+                       view().name("airport/airport"),
+                       model().attributeExists("airport"),
+                       model().attribute("airport", equalTo(airportMapper.mapRead(jfk)))
                );
     }
 
     @Test
     @SneakyThrows
     void createGet() {
-        mockMvc.perform(get("/cities/create"))
+        mockMvc.perform(get("/airports/create"))
                .andExpectAll(
                        status().is2xxSuccessful(),
-                       view().name("city/create"),
-                       model().attributeExists("city")
+                       view().name("airport/create"),
+                       model().attributeExists("airport")
                );
     }
 
     @Test
     @SneakyThrows
     void create() {
-        mockMvc.perform(post("/cities")
+        mockMvc.perform(post("/airports")
                        .with(csrf())
-                       .param(name, "Miami")
-                       .param(countryId, usa.getId()
-                                            .toString()))
+                       .param(code, "LGA")
+                       .param(cityId, newYork.getId()
+                                             .toString()))
                .andExpectAll(
                        status().is3xxRedirection(),
-                       redirectedUrlPattern("/cities/{\\d+}")
+                       redirectedUrlPattern("/airports/{\\d+}")
                );
     }
 
     @Test
     @SneakyThrows
     void update() {
-        mockMvc.perform(post("/cities/" + newYork.getId() + "/update")
+        mockMvc.perform(post("/airports/" + jfk.getId() + "/update")
                        .with(csrf())
-                       .param(name, "Miami")
-                       .param(countryId, usa.getId()
+                       .param(code, "XXX")
+                       .param(cityId, seattle.getId()
                                             .toString()))
                .andExpectAll(
                        status().is3xxRedirection(),
-                       redirectedUrl("/cities/" + newYork.getId())
+                       redirectedUrl("/airports/" + jfk.getId())
                );
     }
 
     @Test
     @SneakyThrows
     void delete() {
-        mockMvc.perform(post("/cities/" + lion.getId() + "/delete")
+        mockMvc.perform(post("/airports/" + ewr.getId() + "/delete")
                        .with(csrf()))
                .andExpectAll(
                        status().is3xxRedirection(),
-                       redirectedUrl("/cities")
+                       redirectedUrl("/airports")
                );
     }
 }

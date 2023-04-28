@@ -5,6 +5,7 @@ import lombok.Value;
 @Value
 public class AirportReadDto {
 
+    Integer id;
     String code;
     CityReadDto city;
 }

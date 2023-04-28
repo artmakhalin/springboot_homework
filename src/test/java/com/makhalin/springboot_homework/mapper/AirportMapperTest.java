@@ -26,21 +26,22 @@ class AirportMapperTest {
     @BeforeEach
     void prepareObjects() {
         var usa = Country.builder()
-                             .name("USA")
-                             .id(1)
-                             .build();
+                         .name("USA")
+                         .id(1)
+                         .build();
         var newYork = City.builder()
-                           .name("New York")
-                           .id(1)
-                           .country(usa)
-                           .build();
+                          .name("New York")
+                          .id(1)
+                          .country(usa)
+                          .build();
         jfk = Airport.builder()
                      .code("JFK")
+                     .id(1)
                      .city(newYork)
                      .build();
         var usaDto = new CountryReadDto(1, "USA");
         var newYorkDto = new CityReadDto(1, "New York", usaDto);
-        jfkDto = new AirportReadDto("JFK", newYorkDto);
+        jfkDto = new AirportReadDto(1,"JFK", newYorkDto);
     }
 
     @Test

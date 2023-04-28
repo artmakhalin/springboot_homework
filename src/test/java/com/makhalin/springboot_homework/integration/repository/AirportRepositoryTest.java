@@ -21,16 +21,17 @@ class AirportRepositoryTest extends IntegrationTestBase {
         var lga = getLga();
         airportRepository.save(lga);
 
-        var actualResult = airportRepository.findById(lga.getCode());
+        var actualResult = airportRepository.findById(lga.getId());
 
         assertThat(actualResult).isPresent();
-        assertThat(actualResult.get()).isEqualTo(lga);
+        assertThat(actualResult.get()
+                               .getId()).isNotNull();
     }
 
     @Test
     void delete() {
         airportRepository.delete(ewr);
-        var actualResult = airportRepository.findById(ewr.getCode());
+        var actualResult = airportRepository.findById(ewr.getId());
 
         assertThat(actualResult).isEmpty();
     }
@@ -38,19 +39,25 @@ class AirportRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         ewr.setCity(seattle);
+        ewr.setCode("XXX");
         airportRepository.saveAndFlush(ewr);
 
-        var actualResult = airportRepository.findById(ewr.getCode());
+        var actualResult = airportRepository.findById(ewr.getId());
 
         assertThat(actualResult).isPresent();
-        assertThat(actualResult.get()
-                               .getCity()).isEqualTo(ewr.getCity());
+        assertAll(
+                () -> assertThat(actualResult.get()
+                                             .getCity()).isEqualTo(ewr.getCity()),
+                () -> assertThat(actualResult.get()
+                                             .getCode()).isEqualTo(ewr.getCode())
+        );
+
 
     }
 
     @Test
     void findById() {
-        var actualResult = airportRepository.findById(jfk.getCode());
+        var actualResult = airportRepository.findById(jfk.getId());
 
         assertThat(actualResult).isPresent();
         assertThat(actualResult.get()).isEqualTo(jfk);

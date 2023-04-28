@@ -13,7 +13,8 @@ id (INTEGER) - PK
 model (VARCHAR) - тип ВС
 
 Airport
-code (CHAR) - IATA код аэропорта, например, Шереметьево - SVO, PK
+id (INTEGER) - PK
+code (CHAR) - IATA код аэропорта, например, Шереметьево - SVO
 city_id (INTEGER) - id города
 
 City
@@ -39,9 +40,9 @@ role (VARCHAR) - роль в системе (ADMIN, USER)
 Flight
 id (BIGINT) - PK
 flight_no (VARCHAR) - номер рейса
-departure_airport_code (CHAR) - id аэропорта вылета
-transit_airport_code (CHAR) - id транзитного аэропорта (может быть null)
-arrival_airport_code (CHAR) - id аэропорта назначения
+departure_airport_id (INTEGER) - id аэропорта вылета
+transit_airport_id (INTEGER) - id транзитного аэропорта (может быть null)
+arrival_airport_id (INTEGER) - id аэропорта назначения
 aircraft_id (INTEGER) - id типа ВС
 time (BIGINT) - полетное время в секундах
 

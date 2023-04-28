@@ -3,6 +3,7 @@ package com.makhalin.springboot_homework.http.controller;
 import com.makhalin.springboot_homework.dto.CityCreateEditDto;
 import com.makhalin.springboot_homework.dto.CityFilter;
 import com.makhalin.springboot_homework.dto.PageResponse;
+import com.makhalin.springboot_homework.service.AirportService;
 import com.makhalin.springboot_homework.service.CityService;
 import com.makhalin.springboot_homework.service.CountryService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class CityController {
 
     private final CityService cityService;
     private final CountryService countryService;
+    private final AirportService airportService;
 
     @GetMapping
     public String findAll(Model model, CityFilter filter, Pageable pageable) {
@@ -37,6 +39,7 @@ public class CityController {
     public String findById(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("city", cityService.findById(id));
         model.addAttribute("countries", countryService.findAll());
+        model.addAttribute("airports", airportService.findAllByCityId(id));
 
         return "city/city";
     }

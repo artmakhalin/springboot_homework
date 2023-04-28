@@ -39,10 +39,17 @@ public class AirportService {
                                 .map(airportMapper::mapRead);
     }
 
-    public AirportReadDto findByCode(String code) {
-        return airportRepository.findById(code)
+    public List<AirportReadDto> findAll() {
+        return airportRepository.findAll()
+                                .stream()
                                 .map(airportMapper::mapRead)
-                                .orElseThrow(notFound("Airport not found with code " + code));
+                                .toList();
+    }
+
+    public AirportReadDto findById(Integer id) {
+        return airportRepository.findById(id)
+                                .map(airportMapper::mapRead)
+                                .orElseThrow(notFound("Airport not found with id " + id));
     }
 
     public List<AirportReadDto> findAllByCityId(Integer cityId) {
@@ -62,22 +69,22 @@ public class AirportService {
     }
 
     @Transactional
-    public AirportReadDto update(String code, AirportCreateEditDto airportDto) {
-        return airportRepository.findById(code)
+    public AirportReadDto update(Integer id, AirportCreateEditDto airportDto) {
+        return airportRepository.findById(id)
                                 .map(entity -> airportMapper.mapUpdate(airportDto, entity))
                                 .map(airportRepository::saveAndFlush)
                                 .map(airportMapper::mapRead)
-                                .orElseThrow(notFound("Airport not found with code " + code));
+                                .orElseThrow(notFound("Airport not found with id " + id));
     }
 
     @Transactional
-    public void delete(String code) {
-        airportRepository.findById(code)
+    public void delete(Integer id) {
+        airportRepository.findById(id)
                          .ifPresentOrElse(entity -> {
                              airportRepository.delete(entity);
                              airportRepository.flush();
                          }, () -> {
-                             throw notFoundException("Airport not found with code " + code);
+                             throw notFoundException("Airport not found with id " + id);
                          });
     }
 }

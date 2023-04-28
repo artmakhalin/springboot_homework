@@ -28,6 +28,13 @@
                                 </select>
                             </label>
                         </div>
+                        <div th:if="${airports.size > 0}">
+                            <label for="airports"><span th:text="|#{admin.airports}:|"></span>
+                                <div id="airports" th:each="airport : ${airports}">
+                                    <a th:href="@{'/airports/' + ${airport.id}}" th:text="|${airport.id}. ${airport.code}|">Airport</a>
+                                </div>
+                            </label><br>
+                        </div>
                         <button type="submit" th:text="#{action.update}"></button>
                     </form>
                     <br>

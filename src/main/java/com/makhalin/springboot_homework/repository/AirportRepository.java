@@ -8,7 +8,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 
 public interface AirportRepository extends
-        JpaRepository<Airport, String>,
+        JpaRepository<Airport, Integer>,
         QuerydslPredicateExecutor<Airport> {
 
     /*Выводит все аэропорты указанной страны*/
