@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @Builder
 @EqualsAndHashCode(of = "name")
-@ToString(exclude = "country")
+@ToString(exclude = {"country", "airports"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
