@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permit</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form th:action="@{/crewAircraft/{crewAircraftId}/update(crewAircraftId=${crewAircraft.id})}" method="post" th:object="${crewAircraft}">
+                        <div>
+                            <label for="crewList"><span th:text="|#{admin.crew}:|"></span>
+                                <select name="crewId" id="crewList">
+                                    <option th:each="crew : ${crewList}"
+                                            th:value="${crew.id}"
+                                            th:selected="${crew.id == crewAircraft.crew.id}"
+                                            th:text="|${crew.firstname} ${crew.lastname}|">Crew</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="aircraftList"><span th:text="|#{admin.aircraft}:|"></span>
+                                <select name="aircraftId" id="aircraftList">
+                                    <option th:each="aircraft : ${aircraftList}"
+                                            th:value="${aircraft.id}"
+                                            th:selected="${aircraft.id == crewAircraft.aircraft.id}"
+                                            th:text="${aircraft.model}">Aircraft</option>
+                                </select>
+                            </label>
+                        </div>
+                        <label for="permitDate"><span th:text="|#{crewAircraft.permitDate}:|"></span>
+                            <input id="permitDate" type="date" name="permitDate" th:value="*{permitDate}">
+                        </label><br>
+                        <button type="submit" th:text="#{action.update}"></button>
+                    </form>
+                    <br>
+                    <form th:action="@{/crewAircraft/{crewAircraftId}/delete(crewAircraftId=${crewAircraft.id})}" method="post">
+                        <button type="submit" th:text="#{action.remove}"></button>
+                    </form>
+                    <br>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class CrewAircraftCreateEditDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @PastOrPresent
+    @PastOrPresent(message = "Permit date should not be in future")
     LocalDate permitDate;
 
     @NotNull

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -157,6 +158,22 @@ public class CrewServiceIT extends IntegrationTestBase {
         assertAll(
                 () -> assertThatNoException().isThrownBy(() -> crewService.delete(marta.getId())),
                 () -> assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> crewService.delete(555))
+        );
+    }
+
+    @Test
+    void findAll() {
+        var actualResult = crewService.findAll();
+        var crewEmails = actualResult.stream()
+                                  .map(CrewReadDto::getEmail)
+                                  .toList();
+
+        assertThat(actualResult).hasSize(4);
+        assertThat(crewEmails).containsExactlyInAnyOrder(
+                alex.getEmail(),
+                bob.getEmail(),
+                jake.getEmail(),
+                marta.getEmail()
         );
     }
 }

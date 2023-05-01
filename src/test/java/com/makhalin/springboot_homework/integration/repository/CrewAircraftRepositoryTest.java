@@ -57,6 +57,13 @@ class CrewAircraftRepositoryTest extends IntegrationTestBase {
         assertThat(actualResults).hasSize(5);
     }
 
+    @Test
+    void findAllByCrewId() {
+        var actualResults = crewAircraftRepository.findAllByCrewId(alex.getId());
+
+        assertThat(actualResults).hasSize(2);
+    }
+
     private CrewAircraft getMartaAirbus330() {
         return CrewAircraft.builder()
                            .permitDate(LocalDate.of(2021, 1, 1))

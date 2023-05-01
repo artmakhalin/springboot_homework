@@ -8,8 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -40,7 +39,9 @@ class LoginControllerIT extends IntegrationTestBase {
                        status().is2xxSuccessful(),
                        view().name("crew/main"),
                        model().attributeExists("crew"),
-                       model().attribute("crew", hasProperty("email", equalTo("alex@test.com")))
+                       model().attribute("crew", hasProperty("email", equalTo("alex@test.com"))),
+                       model().attributeExists("crewAircraftList"),
+                       model().attribute("crewAircraftList", hasSize(2))
                );
     }
 }

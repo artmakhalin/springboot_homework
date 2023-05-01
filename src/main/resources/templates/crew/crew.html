@@ -33,6 +33,17 @@
                 <label for="mkkDate"><span th:text="|#{crew.mkkDate}:|"></span>
                     <input id="mkkDate" type="date" name="mkkDate" th:value="*{mkkDate}">
                 </label><br>
+                <div>
+                    <label for="permits"><span th:text="|#{crew.crewAircraftList}:|"></span>
+                        <div id="permits" th:each="crewAircraft : ${crewAircraftList}">
+                            <a th:href="@{'/crewAircraft/' + ${crewAircraft.id}}" th:text="|${crewAircraft.aircraft.model} (${crewAircraft.permitDate})|">crewAircraft</a>
+                        </div>
+                    </label><br>
+                    <a th:href="@{'/crewAircraft/' + ${crew.id} + '/create'}" th:text="#{action.addPermit}">Add permit</a>
+<!--                    <form th:action="@{/crewAircraft/${crew.id}/create}" method="get" th:object="${crew}">-->
+<!--                        <button type="submit" th:text="#{action.addPermit}"></button>-->
+<!--                    </form>-->
+                </div>
                 <button type="submit" th:text="#{action.update}"></button>
             </form>
             <form th:action="@{/crew/{crewId}/delete(crewId=${crew.id})}" method="post">

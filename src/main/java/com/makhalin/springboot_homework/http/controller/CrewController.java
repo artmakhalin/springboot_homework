@@ -3,6 +3,7 @@ package com.makhalin.springboot_homework.http.controller;
 import com.makhalin.springboot_homework.dto.CrewCreateEditDto;
 import com.makhalin.springboot_homework.dto.CrewFilter;
 import com.makhalin.springboot_homework.dto.PageResponse;
+import com.makhalin.springboot_homework.service.CrewAircraftService;
 import com.makhalin.springboot_homework.service.CrewService;
 import com.makhalin.springboot_homework.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 public class CrewController {
 
     private final CrewService crewService;
+    private final CrewAircraftService crewAircraftService;
 
     @GetMapping
     public String findAllByFilter(Model model, CrewFilter filter, Pageable pageable) {
@@ -37,6 +39,7 @@ public class CrewController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("crew", crewService.findById(id));
+        model.addAttribute("crewAircraftList", crewAircraftService.findAllByCrewId(id));
 
         return "crew/crew";
     }

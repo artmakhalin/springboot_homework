@@ -45,10 +45,10 @@ public abstract class IntegrationTestBase extends AbstractTestBase {
     protected Crew jake = getJake();
     protected Crew bob = getBob();
     protected Crew marta = getMarta();
-    private CrewAircraft alexBoeing777 = getAlexBoeing777();
-    private CrewAircraft alexAirbus320 = getAlexAirbus320();
-    private CrewAircraft jakeBoeing737 = getJakeBoeing737();
-    private CrewAircraft bobAirbus320 = getBobAirbus320();
+    protected CrewAircraft alexBoeing777 = getAlexBoeing777();
+    protected CrewAircraft alexAirbus320 = getAlexAirbus320();
+    protected CrewAircraft jakeBoeing737 = getJakeBoeing737();
+    protected CrewAircraft bobAirbus320 = getBobAirbus320();
     protected CrewAircraft bobBoeing777 = getBobBoeing777();
     protected Flight svoJfk = getSvoJfk();
     protected Flight svoLed = getSvoLed();

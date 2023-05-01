@@ -22,6 +22,22 @@
                         <span th:text="|#{crew.birthdate}: *{birthDate}|"></span><br>
                         <span th:text="|#{crew.employmentDate}: *{employmentDate}|"></span><br>
                         <span th:if="*{mkkDate != null}" th:text="|#{crew.mkkDate}: *{mkkDate}|"></span><br>
+<!--                        <label for="permits"><span th:text="|#{crew.crewAircraftList}:|"></span>-->
+<!--                            <div id="permits" th:each="crewAircraft : ${crewAircraftList}">-->
+<!--                                <span th:text="|${crewAircraft.aircraft.model} (${crewAircraft.permitDate})|"></span>-->
+<!--                            </div>-->
+<!--                        -->
+                        <label for="permits"><span th:text="|#{crew.crewAircraftList}:|"></span></label><br>
+                        <table id="permits">
+                            <tr>
+                                <th><span th:text="|#{admin.aircraft}:|"></span></th>
+                                <th><span th:text="|#{crewAircraft.permitDate}:|"></span></th>
+                            </tr>
+                            <tr th:each="crewAircraft : ${crewAircraftList}">
+                                <td th:text="${crewAircraft.aircraft.model}">Aircraft</td>
+                                <td th:text="${crewAircraft.permitDate}">Permit date</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <div class="col-sm">
