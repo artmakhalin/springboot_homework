@@ -94,8 +94,11 @@ class CrewAircraftMapperTest {
 
     @Test
     void mapRead() {
-        doReturn(alexDto).when(crewMapper).mapRead(alex);
-        doReturn(boeingDto).when(aircraftMapper).mapRead(boeing);
+        doReturn(alexDto).when(crewMapper)
+                         .mapRead(alex);
+        doReturn(boeingDto).when(aircraftMapper)
+                           .mapRead(boeing);
+
         var actualResult = crewAircraftMapper.mapRead(alexBoeing);
 
         assertThat(actualResult).isEqualTo(alexBoeingDto);
@@ -105,8 +108,11 @@ class CrewAircraftMapperTest {
 
     @Test
     void mapCreate() {
-        doReturn(Optional.of(alex)).when(crewRepository).findById(alex.getId());
-        doReturn(Optional.of(boeing)).when(aircraftRepository).findById(boeing.getId());
+        doReturn(Optional.of(alex)).when(crewRepository)
+                                   .findById(alex.getId());
+        doReturn(Optional.of(boeing)).when(aircraftRepository)
+                                     .findById(boeing.getId());
+
         var actualResult = crewAircraftMapper.mapCreate(new CrewAircraftCreateEditDto(
                 LocalDate.of(2018, 1, 1),
                 alex.getId(),
@@ -124,12 +130,15 @@ class CrewAircraftMapperTest {
 
     @Test
     void mapUpdate() {
-        doReturn(Optional.of(alex)).when(crewRepository).findById(alex.getId());
-        doReturn(Optional.of(boeing)).when(aircraftRepository).findById(boeing.getId());
+        doReturn(Optional.of(alex)).when(crewRepository)
+                                   .findById(alex.getId());
+        doReturn(Optional.of(boeing)).when(aircraftRepository)
+                                     .findById(boeing.getId());
+
         var actualResult = crewAircraftMapper.mapUpdate(new CrewAircraftCreateEditDto(
-                LocalDate.of(2020, 5, 5),
-                alex.getId(),
-                boeing.getId()),
+                        LocalDate.of(2020, 5, 5),
+                        alex.getId(),
+                        boeing.getId()),
                 alexBoeing
         );
 
