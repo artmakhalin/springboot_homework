@@ -2,8 +2,13 @@ package com.makhalin.springboot_homework.dto;
 
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 import java.time.LocalDate;
 
 @Value
@@ -21,13 +26,16 @@ public class FlightCreateEditDto {
 
     Integer transitAirportId;
 
-    @PastOrPresent(message = "Flight should not be in future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @PastOrPresent(message = "Flight could not be in future")
     LocalDate departureDate;
 
-    @Pattern(regexp = "\\d+", message = "Only numbers")
+    @Min(value = 0, message = "Flight time could not be negative")
+    @Max(value = 20, message = "Flight time could not greater than 20 h")
     Integer hours;
 
-    @Pattern(regexp = "\\d+", message = "Only numbers")
+    @Min(value = 0, message = "Minutes could not negative")
+    @Max(value = 59, message = "Minutes could not greater than 59")
     Integer minutes;
 
     @NotNull

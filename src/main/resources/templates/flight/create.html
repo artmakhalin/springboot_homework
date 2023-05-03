@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Flight</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form th:action="@{/flights}" method="post" th:object="${flight}">
+                        <label for="flightNo"><span th:text="|#{flight.flightNo}:|"></span>
+                            <input id="flightNo" type="text" name="flightNo" th:value="*{flightNo}">
+                        </label><br>
+                        <div>
+                            <label for="departureAirport"><span th:text="|#{flight.departureAirport}:|"></span>
+                                <select name="departureAirportId" id="departureAirport">
+                                    <option th:each="airport : ${airports}"
+                                            th:value="${airport.id}"
+                                            th:text="${airport.code}">Airport</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="transitAirport"><span th:text="|#{flight.transitAirport}:|"></span>
+                                <select name="transitAirportId" id="transitAirport">
+                                    <option></option>
+                                    <option th:each="airport : ${airports}"
+                                            th:value="${airport.id}"
+                                            th:text="${airport.code}">Airport</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="arrivalAirport"><span th:text="|#{flight.arrivalAirport}:|"></span>
+                                <select name="arrivalAirportId" id="arrivalAirport">
+                                    <option th:each="airport : ${airports}"
+                                            th:value="${airport.id}"
+                                            th:text="${airport.code}">Airport</option>
+                                </select>
+                            </label>
+                        </div>
+                        <label for="departureDate"><span th:text="|#{flight.departureDate}:|"></span>
+                            <input id="departureDate" type="date" name="departureDate" th:value="*{departureDate}">
+                        </label><br>
+                        <label for="hours"><span th:text="|#{flight.hours}:|"></span>
+                            <input id="hours" type="number" name="hours" min="0" max="20" th:value="*{hours}">
+                        </label>
+                        <label for="minutes"><span th:text="|#{flight.minutes}:|"></span>
+                            <input id="minutes" type="number" name="minutes" min="0" max="59" th:value="*{minutes}">
+                        </label><br>
+                        <div>
+                            <label for="aircraft"><span th:text="|#{aircraft.model}:|"></span>
+                                <select name="aircraftId" id="aircraft">
+                                    <option th:each="aircraft : ${aircraftList}"
+                                            th:value="${aircraft.id}"
+                                            th:text="${aircraft.model}">Aircraft</option>
+                                </select>
+                            </label>
+                        </div>
+                        <button type="submit" th:text="#{action.create}"></button>
+                    </form>
+                    <br>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

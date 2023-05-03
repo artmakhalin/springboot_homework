@@ -1,6 +1,6 @@
 package com.makhalin.springboot_homework.repository;
 
-import com.makhalin.springboot_homework.dto.FlightsFilter;
+import com.makhalin.springboot_homework.dto.FlightFilter;
 import com.makhalin.springboot_homework.entity.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class FilterFlightRepositoryImpl implements FilterFlightRepository {
      */
 
     @Override
-    public List<Flight> findByCrewAndMonth(FlightsFilter filter) {
+    public List<Flight> findByCrewAndMonth(FlightFilter filter) {
         var flightGraph = entityManager.createEntityGraph(Flight.class);
         flightGraph.addAttributeNodes("flightCrews", "time", "departureDate");
         var flightCrewsSubgraph = flightGraph.addSubgraph("flightCrews", FlightCrew.class);
@@ -62,7 +62,7 @@ public class FilterFlightRepositoryImpl implements FilterFlightRepository {
      */
 
     @Override
-    public Map<Integer, Long> findMonthlyFlightTimeStatisticsByCrewAndYear(FlightsFilter filter) {
+    public Map<Integer, Long> findMonthlyFlightTimeStatisticsByCrewAndYear(FlightFilter filter) {
         var predicate = QPredicate.builder()
                                   .add(filter.getCrewEmail(), crew.email::equalsIgnoreCase)
                                   .add(filter.getYear(),
