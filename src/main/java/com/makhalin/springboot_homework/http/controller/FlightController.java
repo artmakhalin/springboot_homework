@@ -5,6 +5,7 @@ import com.makhalin.springboot_homework.dto.FlightFilter;
 import com.makhalin.springboot_homework.dto.PageResponse;
 import com.makhalin.springboot_homework.service.AircraftService;
 import com.makhalin.springboot_homework.service.AirportService;
+import com.makhalin.springboot_homework.service.FlightCrewService;
 import com.makhalin.springboot_homework.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class FlightController {
     private final FlightService flightService;
     private final AirportService airportService;
     private final AircraftService aircraftService;
+    private final FlightCrewService flightCrewService;
 
     @GetMapping
     public String findAll(Model model, FlightFilter filter, Pageable pageable) {
@@ -40,6 +42,7 @@ public class FlightController {
         model.addAttribute("flight", flightService.findById(id));
         model.addAttribute("airports", airportService.findAll());
         model.addAttribute("aircraftList", aircraftService.findAll());
+        model.addAttribute("flightCrewList", flightCrewService.findAllByFlightId(id));
 
         return "flight/flight";
     }

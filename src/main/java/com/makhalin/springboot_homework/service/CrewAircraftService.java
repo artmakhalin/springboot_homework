@@ -3,7 +3,6 @@ package com.makhalin.springboot_homework.service;
 import com.makhalin.springboot_homework.dto.CrewAircraftCreateEditDto;
 import com.makhalin.springboot_homework.dto.CrewAircraftReadDto;
 import com.makhalin.springboot_homework.entity.CrewAircraft;
-import com.makhalin.springboot_homework.exception.NotFoundException;
 import com.makhalin.springboot_homework.mapper.CrewAircraftMapper;
 import com.makhalin.springboot_homework.repository.CrewAircraftRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import java.util.Optional;
 import static com.makhalin.springboot_homework.exception.BadRequestException.badRequest;
 import static com.makhalin.springboot_homework.exception.BadRequestException.badRequestException;
 import static com.makhalin.springboot_homework.exception.NotFoundException.notFound;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +72,7 @@ public class CrewAircraftService {
                     crewAircraftRepository.delete(entity);
                     crewAircraftRepository.flush();
                 }, () -> {
-                    throw NotFoundException.notFoundException("Permit not found with id " + id);
+                    throw notFoundException("Permit not found with id " + id);
                 });
     }
 

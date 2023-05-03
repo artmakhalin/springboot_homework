@@ -78,6 +78,14 @@
                                 </select>
                             </label>
                         </div>
+                        <div>
+                            <label for="assignments"><span th:text="|#{flight.assignments}:|"></span>
+                                <div id="assignments" th:each="flightCrew : ${flightCrewList}">
+                                    <a th:href="@{'/flightCrew/' + ${flightCrew.id}}" th:text="|${flightCrew.crew.email} (${flightCrew.classOfService})|">flightCrew</a>
+                                </div>
+                            </label><br>
+                            <a th:href="@{'/flightCrew/' + ${flight.id} + '/create'}" th:text="#{action.addAssignment}">Add assignment</a>
+                        </div>
                         <button type="submit" th:text="#{action.update}"></button>
                     </form>
                     <br>

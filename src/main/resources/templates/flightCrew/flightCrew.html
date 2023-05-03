@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Assignment</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form th:action="@{/flightCrew/{flightCrewId}/update(flightCrewId=${flightCrew.id})}" method="post" th:object="${flightCrew}">
+                        <label for="flightId"><span th:text="|#{flight.id}:|"></span>
+                            <input id="flightId" name="flightId" type="text" th:value="*{flight.id}" readonly/>
+                        </label><br>
+                        <label for="flight"><span th:text="|#{flight.flight}:|"></span>
+                            <span id="flight"
+                                  type="text"
+                                  th:text="|${flightCrew.flight.flightNo}
+                                  from ${flightCrew.flight.departureAirport.code}
+                                  to ${flightCrew.flight.arrivalAirport.code}
+                                  (${flightCrew.flight.departureDate})
+                                  on ${flightCrew.flight.aircraft.model}|">Flight
+                            </span>
+                        </label><br>
+                        <div>
+                            <label for="crewList"><span th:text="|#{crew.crew}:|"></span>
+                                <select name="crewId" id="crewList">
+                                    <option th:each="crew : ${crewList}"
+                                            th:value="${crew.id}"
+                                            th:selected="${crew.id == flightCrew.crew.id}"
+                                            th:text="|${crew.id}. ${crew.firstname} ${crew.lastname}|">Crew</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div th:each="class : ${classesOfService}">
+                            <input th:id="${class}" type="radio" name="class" th:value="${class}" th:checked="${class == flightCrew.classOfService}" th:field="*{classOfService}">
+                            <label th:for="${class}" th:text="${class}">Class</label>
+                        </div>
+                        <label for="isTurnaround"><span th:text="|#{flightCrew.isTurnaround}:|"></span>
+                            <input id="isTurnaround" type="checkbox" name="isTurnaround" th:value="*{isTurnaround}" th:checked="*{isTurnaround}" th:field="*{isTurnaround}">
+                        </label><br>
+                        <label for="isPassenger"><span th:text="|#{flightCrew.isPassenger}:|"></span>
+                            <input id="isPassenger" type="checkbox" name="isPassenger" th:value="*{isPassenger}" th:checked="*{isPassenger}" th:field="*{isPassenger}">
+                        </label><br>
+                        <button type="submit" th:text="#{action.update}"></button>
+                    </form>
+                    <br>
+                    <form th:action="@{/flightCrew/{flightCrewId}/delete(flightCrewId=${flightCrew.id})}" method="post">
+                        <button type="submit" th:text="#{action.remove}"></button>
+                    </form>
+                    <br>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

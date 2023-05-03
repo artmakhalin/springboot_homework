@@ -45,7 +45,8 @@ public class SecurityConfiguration {
                                 "/countries/**",
                                 "/crew/**",
                                 "/crewAircraft/**",
-                                "/flights/**"
+                                "/flights/**",
+                                "/flightCrew/**"
                         )
                         .hasAnyAuthority(ADMIN.getAuthority())
                         .anyRequest()

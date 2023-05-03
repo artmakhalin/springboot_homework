@@ -9,3 +9,8 @@ ALTER TABLE crew_aircraft
 ALTER TABLE flight
     ADD CONSTRAINT flight_date_unique
         UNIQUE (flight_no, departure_date);
+
+--changeset makhalin:3
+ALTER TABLE flight_crew
+    ADD CONSTRAINT flight_crew_unique
+        UNIQUE (flight_id, crew_id);
