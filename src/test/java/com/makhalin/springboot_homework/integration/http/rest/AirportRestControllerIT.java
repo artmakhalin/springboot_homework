@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-public class AirportRestControllerIT extends IntegrationTestBase {
+class AirportRestControllerIT extends IntegrationTestBase {
 
     @Autowired
     private MockMvc mockMvc;

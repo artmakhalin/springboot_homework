@@ -20,7 +20,7 @@ public class FlightCrewCreateEditDto {
 
     ClassOfService classOfService;
 
-    boolean isTurnaround;
+    Boolean isTurnaround;
 
-    boolean isPassenger;
+    Boolean isPassenger;
 }

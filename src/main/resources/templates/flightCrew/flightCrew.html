@@ -38,10 +38,12 @@
                                 </select>
                             </label>
                         </div>
-                        <div th:each="class : ${classesOfService}">
-                            <input th:id="${class}" type="radio" name="class" th:value="${class}" th:checked="${class == flightCrew.classOfService}" th:field="*{classOfService}">
-                            <label th:for="${class}" th:text="${class}">Class</label>
-                        </div>
+                        <label for="classOfService"><span th:text="|#{flightCrew.classOfService}:|"></span>
+                            <div id="classOfService" th:each="class : ${classesOfService}">
+                                <input th:id="${class}" type="radio" name="class" th:value="${class}" th:checked="${class == flightCrew.classOfService}" th:field="*{classOfService}">
+                                <label th:for="${class}" th:text="${class}">Class</label>
+                            </div>
+                        </label><br>
                         <label for="isTurnaround"><span th:text="|#{flightCrew.isTurnaround}:|"></span>
                             <input id="isTurnaround" type="checkbox" name="isTurnaround" th:value="*{isTurnaround}" th:checked="*{isTurnaround}" th:field="*{isTurnaround}">
                         </label><br>

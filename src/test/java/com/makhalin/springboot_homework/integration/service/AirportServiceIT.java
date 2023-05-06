@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AirportServiceIT extends IntegrationTestBase {
+class AirportServiceIT extends IntegrationTestBase {
 
     @Autowired
     private AirportService airportService;
@@ -114,8 +114,10 @@ public class AirportServiceIT extends IntegrationTestBase {
     @Test
     void delete() {
         assertAll(
-                () -> assertThatNoException().isThrownBy(() -> airportService.delete(ewr.getId())),
-                () -> assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> airportService.delete(555))
+                () -> assertThatNoException()
+                        .isThrownBy(() -> airportService.delete(ewr.getId())),
+                () -> assertThatExceptionOfType(NotFoundException.class)
+                        .isThrownBy(() -> airportService.delete(555))
         );
     }
 }

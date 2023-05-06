@@ -10,6 +10,6 @@ public class FlightCrewReadDto {
     FlightReadDto flight;
     CrewReadDto crew;
     ClassOfService classOfService;
-    boolean isTurnaround;
-    boolean isPassenger;
+    Boolean isTurnaround;
+    Boolean isPassenger;
 }

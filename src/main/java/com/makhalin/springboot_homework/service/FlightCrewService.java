@@ -79,7 +79,7 @@ public class FlightCrewService {
     }
 
     private FlightCrew validateAssignment(FlightCrew flightCrew) {
-        if (!flightCrew.isPassenger()) {
+        if (!flightCrew.getIsPassenger()) {
             crewAircraftRepository.findByCrewIdAndAircraftId(
                                           flightCrew.getCrew()
                                                     .getId(),
