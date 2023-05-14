@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Assignment</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form th:action="@{/flightCrew}" method="post" th:object="${flightCrew}">
+                        <label for="flightId"><span th:text="|#{flight.id}:|"></span>
+                            <input id="flightId" name="flightId" type="text" th:value="*{flightId}" readonly/>
+                        </label><br>
+                        <label for="flight"><span th:text="|#{flight.flight}:|"></span>
+                            <span id="flight" type="text" th:text="|${flight.id}. ${flight.flightNo} from ${flight.departureAirport.code} to ${flight.arrivalAirport.code} (${flight.departureDate}) on ${flight.aircraft.model}|">Flight</span>
+                        </label><br>
+                        <div>
+                            <label for="crewList"><span th:text="|#{crew.crew}:|"></span>
+                                <select name="crewId" id="crewList">
+                                    <option th:each="crew : ${crewList}"
+                                            th:value="${crew.id}"
+                                            th:text="|${crew.id}. ${crew.firstname} ${crew.lastname}|">Crew</option>
+                                </select>
+                            </label>
+                        </div>
+                        <label for="classOfService"><span th:text="|#{flightCrew.classOfService}:|"></span>
+                            <div id="classOfService" th:each="class : ${classesOfService}">
+                                <input th:id="${class}" type="radio" name="class" th:value="${class}" required th:field="*{classOfService}">
+                                <label th:for="${class}" th:text="${class}">Class</label>
+                            </div>
+                        </label><br>
+                        <label for="isTurnaround"><span th:text="|#{flightCrew.isTurnaround}:|"></span>
+                            <input id="isTurnaround" type="checkbox" name="isTurnaround" th:value="*{isTurnaround}" th:field="*{isTurnaround}">
+                        </label><br>
+                        <label for="isPassenger"><span th:text="|#{flightCrew.isPassenger}:|"></span>
+                            <input id="isPassenger" type="checkbox" name="isPassenger" th:value="*{isPassenger}" th:field="*{isPassenger}">
+                        </label><br>
+                        <button type="submit" th:text="#{action.create}"></button>
+                    </form>
+                    <br>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

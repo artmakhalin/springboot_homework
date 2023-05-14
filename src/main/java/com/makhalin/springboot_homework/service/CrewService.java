@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.makhalin.springboot_homework.entity.QCrew.crew;
@@ -35,11 +36,7 @@ public class CrewService implements UserDetailsService {
 
     @Transactional
     public CrewReadDto create(CrewCreateEditDto crewDto) {
-        if (crewDto.getEmploymentDate()
-                   .isBefore(crewDto.getBirthDate()
-                                    .plusYears(18))) {
-            throw badRequestException("Employee must be 18 years old");
-        }
+        validateCrewEmploymentDate(crewDto);
         return Optional.of(crewDto)
                        .map(crewMapper::mapCreate)
                        .map(crewRepository::save)
@@ -60,8 +57,15 @@ public class CrewService implements UserDetailsService {
 
     public CrewReadDto findByEmail(String email) {
         return crewRepository.findByEmail(email)
-                .map(crewMapper::mapRead)
-                .orElseThrow(notFound("Crew not found with email " + email));
+                             .map(crewMapper::mapRead)
+                             .orElseThrow(notFound("Crew not found with email " + email));
+    }
+
+    public List<CrewReadDto> findAll() {
+        return crewRepository.findAll()
+                             .stream()
+                             .map(crewMapper::mapRead)
+                             .toList();
     }
 
     public Page<CrewReadDto> findAllByFilter(CrewFilter filter, Pageable pageable) {
@@ -83,26 +87,30 @@ public class CrewService implements UserDetailsService {
 
     @Transactional
     public CrewReadDto update(Integer id, CrewCreateEditDto crewDto) {
-        if (crewDto.getEmploymentDate()
-                   .isBefore(crewDto.getBirthDate()
-                                    .plusYears(18))) {
-            throw badRequestException("Employee must be 18 years old");
-        }
+        validateCrewEmploymentDate(crewDto);
         return crewRepository.findById(id)
-                .map(entity -> crewMapper.mapUpdate(crewDto, entity))
-                .map(crewRepository::saveAndFlush)
-                .map(crewMapper::mapRead)
-                .orElseThrow(notFound("Crew not found with id " + id));
+                             .map(entity -> crewMapper.mapUpdate(crewDto, entity))
+                             .map(crewRepository::saveAndFlush)
+                             .map(crewMapper::mapRead)
+                             .orElseThrow(notFound("Crew not found with id " + id));
     }
 
     @Transactional
     public void delete(Integer id) {
         crewRepository.findById(id)
-                .ifPresentOrElse(entity -> {
-                    crewRepository.delete(entity);
-                    crewRepository.flush();
-                }, () -> {
-                    throw notFoundException("Crew not found with id " + id);
-                });
+                      .ifPresentOrElse(entity -> {
+                          crewRepository.delete(entity);
+                          crewRepository.flush();
+                      }, () -> {
+                          throw notFoundException("Crew not found with id " + id);
+                      });
+    }
+
+    private void validateCrewEmploymentDate(CrewCreateEditDto crewDto) {
+        if (crewDto.getEmploymentDate()
+                   .isBefore(crewDto.getBirthDate()
+                                    .plusYears(18))) {
+            throw badRequestException("Employee must be 18 years old");
+        }
     }
 }

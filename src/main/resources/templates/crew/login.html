@@ -12,24 +12,25 @@
             <div class="col-sm">
             </div>
             <div class="col-sm">
+                <div th:insert="~{fragment :: locale}"></div>
                 <form th:action="@{/login}" method="post">
                     <div style="color: red" th:if="${param.error}">
-                        Bad credentials
+                        <span th:text="#{login.error}"></span>
                     </div>
-                    <label for="username">Email:
+                    <label for="username"><span th:text="|#{login.username}:|"></span>
                         <input id="username" type="text" name="username">
                     </label><br>
-                    <label for="password">Password:
+                    <label for="password"><span th:text="|#{login.password}:|"></span>
                         <input id="password" type="password" name="password">
                     </label><br>
-                    <button type="submit">Login</button>
+                    <button type="submit" th:text="#{login.login}"></button>
                 </form>
                 <div>
-                    <div>Login with:</div>
+                    <div><span th:text="|#{login.loginWith}:|"></span></div>
                     <a href="/oauth2/authorization/google">Google</a>
                 </div>
                 <form action="/registration">
-                    <button type="submit">Registration</button>
+                    <button type="submit" th:text="#{login.registration}"></button>
                 </form>
             </div>
             <div class="col-sm">

@@ -49,7 +49,9 @@ public class CrewControllerIT extends IntegrationTestBase {
                        status().is2xxSuccessful(),
                        view().name("crew/crew"),
                        model().attributeExists("crew"),
-                       model().attribute("crew", equalTo(crewMapper.mapRead(alex)))
+                       model().attribute("crew", equalTo(crewMapper.mapRead(alex))),
+                       model().attributeExists("crewAircraftList"),
+                       model().attribute("crewAircraftList", hasSize(2))
                );
     }
 

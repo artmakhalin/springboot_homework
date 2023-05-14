@@ -1,6 +1,6 @@
 package com.makhalin.springboot_homework.integration.repository;
 
-import com.makhalin.springboot_homework.dto.FlightsFilter;
+import com.makhalin.springboot_homework.dto.FlightFilter;
 import com.makhalin.springboot_homework.entity.Flight;
 import com.makhalin.springboot_homework.entity.FlightCrew;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
@@ -88,11 +88,11 @@ class FlightRepositoryTest extends IntegrationTestBase {
     void findByCrewAndMonth() {
         var jfkSea = getJfkSea();
         saveJfkSea(jfkSea);
-        var filter = FlightsFilter.builder()
-                                  .crewEmail(alex.getEmail())
-                                  .month(3)
-                                  .year(2023)
-                                  .build();
+        var filter = FlightFilter.builder()
+                                 .crewEmail(alex.getEmail())
+                                 .month(3)
+                                 .year(2023)
+                                 .build();
         var actualResult = flightRepository.findByCrewAndMonth(filter);
         var flightNos = actualResult.stream()
                                     .map(Flight::getFlightNo)
@@ -138,10 +138,10 @@ class FlightRepositoryTest extends IntegrationTestBase {
     @Test
     void findMonthlyFlightTimeStatisticsByCrewAndYear() {
         saveJfkSea(getJfkSea());
-        var filter = FlightsFilter.builder()
-                                  .crewEmail(alex.getEmail())
-                                  .year(2023)
-                                  .build();
+        var filter = FlightFilter.builder()
+                                 .crewEmail(alex.getEmail())
+                                 .year(2023)
+                                 .build();
         var actualResult = flightRepository.findMonthlyFlightTimeStatisticsByCrewAndYear(filter);
         var monthTimes = actualResult.values()
                                      .stream()

@@ -15,21 +15,21 @@
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
                     <form action="/cities">
-                        <label for="country">Country:
+                        <label for="country"><span th:text="|#{country.country}:|"></span>
                             <input id="country" type="text" name="country" th:value="${filter.country}">
                         </label>
-                        <label for="city">City:
+                        <label for="city"><span th:text="|#{city.city}:|"></span>
                             <input id="city" type="text" name="city" th:value="${filter.city}">
                         </label>
                         <div>
-                            <label for="page">Page:
+                            <label for="page"><span th:text="|#{filter.page}:|"></span>
                                 <input id="page" type="number" name="page" th:value="${cities.metadata.page}">
                             </label>
-                            <label for="size">Size:
+                            <label for="size"><span th:text="|#{filter.size}:|"></span>
                                 <input id="size" type="number" name="size" th:value="${cities.metadata.size}">
                             </label>
                         </div>
-                        <button type="submit">Filter</button>
+                        <button type="submit" th:text="#{filter.filter}"></button>
                     </form>
                     <br>
                     <div th:each="city : ${cities.content}">
@@ -37,7 +37,7 @@
                     </div>
                     <br>
                     <form action="/cities/create">
-                        <button type="submit">Create</button>
+                        <button type="submit" th:text="#{action.create}"></button>
                     </form>
                 </div>
                 <div class="col-sm">

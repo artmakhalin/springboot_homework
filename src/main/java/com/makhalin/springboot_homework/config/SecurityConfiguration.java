@@ -40,9 +40,13 @@ public class SecurityConfiguration {
                         .antMatchers(
                                 "/api/v1/admin/**",
                                 "/cities/**",
+                                "/airports/**",
                                 "/aircraft/**",
                                 "/countries/**",
-                                "/crew/**"
+                                "/crew/**",
+                                "/crewAircraft/**",
+                                "/flights/**",
+                                "/flightCrew/**"
                         )
                         .hasAnyAuthority(ADMIN.getAuthority())
                         .anyRequest()

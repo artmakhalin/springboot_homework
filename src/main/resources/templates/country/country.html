@@ -15,19 +15,21 @@
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
                     <form th:action="@{/countries/{countryId}/update(countryId=${country.id})}" method="post" th:object="${country}">
-                        <label for="name">Name:
+                        <label for="name"><span th:text="|#{country.country}:|"></span>
                             <input id="name" type="text" name="name" th:value="*{name}">
                         </label><br>
-                        <label for="cities">Cities:
-                            <div id="cities" th:each="city : ${cities}">
-                                <a th:href="@{'/cities/' + ${city.id}}" th:text="|${city.id}. ${city.name}|">City</a>
-                            </div>
-                        </label><br>
-                        <button type="submit">Update</button>
+                        <div th:if="${cities.size > 0}">
+                            <label for="cities"><span th:text="|#{admin.cities}:|"></span>
+                                <div id="cities" th:each="city : ${cities}">
+                                    <a th:href="@{'/cities/' + ${city.id}}" th:text="|${city.id}. ${city.name}|">City</a>
+                                </div>
+                            </label><br>
+                        </div>
+                        <button type="submit" th:text="#{action.update}"></button>
                     </form>
                     <br>
                     <form th:action="@{/countries/{countryId}/delete(countryId=${country.id})}" method="post">
-                        <button type="submit">Remove</button>
+                        <button type="submit" th:text="#{action.remove}"></button>
                     </form>
                     <br>
                 </div>

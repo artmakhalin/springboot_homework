@@ -34,7 +34,7 @@ class FlightCrewRepositoryTest extends IntegrationTestBase {
     @Test
     void update() {
         ledVogAlex.setClassOfService(ClassOfService.ECONOMY);
-        ledVogAlex.setPassenger(true);
+        ledVogAlex.setIsPassenger(true);
         flightCrewRepository.saveAndFlush(ledVogAlex);
 
         var actualResult = flightCrewRepository.findById(ledVogAlex.getId());
@@ -44,7 +44,7 @@ class FlightCrewRepositoryTest extends IntegrationTestBase {
                 () -> assertThat(actualResult.get()
                                              .getClassOfService()).isEqualTo(ledVogAlex.getClassOfService()),
                 () -> assertThat(actualResult.get()
-                                             .isPassenger()).isEqualTo(ledVogAlex.isPassenger())
+                                             .getIsPassenger()).isEqualTo(ledVogAlex.getIsPassenger())
         );
     }
 

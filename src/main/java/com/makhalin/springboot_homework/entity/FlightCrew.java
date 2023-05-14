@@ -43,10 +43,10 @@ public class FlightCrew {
     private ClassOfService classOfService;
 
     @Column(nullable = false)
-    private boolean isTurnaround;
+    private Boolean isTurnaround;
 
     @Column(nullable = false)
-    private boolean isPassenger;
+    private Boolean isPassenger;
 
     public void setCrew(Crew crew) {
         this.crew = crew;

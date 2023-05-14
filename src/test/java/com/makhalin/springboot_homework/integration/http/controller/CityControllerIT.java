@@ -53,7 +53,9 @@ class CityControllerIT extends IntegrationTestBase {
                        status().is2xxSuccessful(),
                        view().name("city/city"),
                        model().attributeExists("city"),
-                       model().attribute("city", equalTo(cityMapper.mapRead(newYork)))
+                       model().attribute("city", equalTo(cityMapper.mapRead(newYork))),
+                       model().attributeExists("airports"),
+                       model().attribute("airports", hasSize(2))
                );
     }
 

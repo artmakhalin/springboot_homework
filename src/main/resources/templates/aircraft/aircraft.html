@@ -15,14 +15,14 @@
                     <div th:insert="~{fragment :: header}"></div>
                     <div th:insert="~{fragment :: menu}"></div>
                     <form th:action="@{/aircraft/{aircraftId}/update(aircraftId=${aircraft.id})}" method="post" th:object="${aircraft}">
-                        <label for="model">Model:
+                        <label for="model"><span th:text="|#{aircraft.model}:|"></span>
                             <input id="model" type="text" name="model" th:value="*{model}">
                         </label><br>
-                        <button type="submit">Update</button>
+                        <button type="submit" th:text="#{action.update}"></button>
                     </form>
                     <br>
                     <form th:action="@{/aircraft/{aircraftId}/delete(aircraftId=${aircraft.id})}" method="post">
-                        <button type="submit">Remove</button>
+                        <button type="submit" th:text="#{action.remove}"></button>
                     </form>
                     <br>
                 </div>

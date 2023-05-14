@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Permit</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form th:action="@{/crewAircraft}" method="post" th:object="${crewAircraft}">
+                        <label for="crewId"><span th:text="|#{crew.id}:|"></span>
+                            <input id="crewId" name="crewId" type="text" th:value="*{crewId}" readonly/>
+                        </label><br>
+                        <label for="crew"><span th:text="|#{crew.crew}:|"></span>
+                            <span id="crew" type="text" th:text="|${crew.firstname} ${crew.lastname}|">Crew</span>
+                        </label><br>
+                        <div>
+                            <label for="aircraftList"><span th:text="|#{admin.aircraft}:|"></span>
+                                <select name="aircraftId" id="aircraftList">
+                                    <option th:each="aircraft : ${aircraftList}"
+                                            th:value="${aircraft.id}"
+                                            th:text="${aircraft.model}">Aircraft</option>
+                                </select>
+                            </label>
+                        </div>
+                        <label for="permitDate"><span th:text="|#{crewAircraft.permitDate}:|"></span>
+                            <input id="permitDate" type="date" name="permitDate" th:value="*{permitDate}">
+                        </label><br>
+                        <button type="submit" th:text="#{action.create}"></button>
+                    </form>
+                    <br>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

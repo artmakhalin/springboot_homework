@@ -22,7 +22,10 @@ import java.util.List;
 public class Airport {
 
     @Id
-    @Column(columnDefinition = "bpchar")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+
+    @Column(columnDefinition = "bpchar", unique = true, nullable = false)
     private String code;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

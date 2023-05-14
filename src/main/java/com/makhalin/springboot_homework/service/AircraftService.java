@@ -2,7 +2,6 @@ package com.makhalin.springboot_homework.service;
 
 import com.makhalin.springboot_homework.dto.AircraftCreateEditDto;
 import com.makhalin.springboot_homework.dto.AircraftReadDto;
-import com.makhalin.springboot_homework.exception.NotFoundException;
 import com.makhalin.springboot_homework.mapper.AircraftMapper;
 import com.makhalin.springboot_homework.repository.AircraftRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import java.util.Optional;
 
 import static com.makhalin.springboot_homework.exception.BadRequestException.badRequest;
 import static com.makhalin.springboot_homework.exception.NotFoundException.notFound;
+import static com.makhalin.springboot_homework.exception.NotFoundException.notFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +61,7 @@ public class AircraftService {
                     aircraftRepository.delete(entity);
                     aircraftRepository.flush();
                 }, () -> {
-                    throw NotFoundException.notFoundException("Aircraft not found with id " + id);
+                    throw notFoundException("Aircraft not found with id " + id);
                 });
     }
 }

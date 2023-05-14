@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Flights</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form action="/flights">
+                        <label for="arrivalAirport"><span th:text="|#{flight.arrivalAirport}:|"></span>
+                            <input id="arrivalAirport" type="text" name="arrivalAirport" th:value="${filter.arrivalAirport}">
+                        </label>
+                        <label for="departureAirport"><span th:text="|#{flight.departureAirport}:|"></span>
+                            <input id="departureAirport" type="text" name="departureAirport" th:value="${filter.departureAirport}">
+                        </label>
+                        <label for="aircraft"><span th:text="|#{aircraft.model}:|"></span>
+                            <input id="aircraft" type="text" name="aircraft" th:value="${filter.aircraft}">
+                        </label>
+                        <div>
+                            <label for="month"><span th:text="|#{flight.month}:|"></span>
+                                <input id="month" type="number" name="month" min="1" max="12" th:value="${filter.month}">
+                            </label>
+                            <label for="year"><span th:text="|#{flight.year}:|"></span>
+                                <input id="year" type="number" name="year" min="2000" max="2023" th:value="${filter.year}">
+                            </label>
+                        </div>
+                        <div>
+                            <label for="page"><span th:text="|#{filter.page}:|"></span>
+                                <input id="page" type="number" name="page" th:value="${flights.metadata.page}">
+                            </label>
+                            <label for="size"><span th:text="|#{filter.size}:|"></span>
+                                <input id="size" type="number" name="size" th:value="${flights.metadata.size}">
+                            </label>
+                        </div>
+                        <button type="submit" th:text="#{filter.filter}"></button>
+                    </form>
+                    <br>
+                    <div th:each="flight : ${flights.content}">
+                        <a th:href="@{'/flights/' + ${flight.id}}" th:text="|${flight.id}. ${flight.flightNo} from ${flight.departureAirport.code} to ${flight.arrivalAirport.code} (${flight.departureDate})|">Flight</a>
+                    </div>
+                    <br>
+                    <form action="/flights/create">
+                        <button type="submit" th:text="#{action.create}"></button>
+                    </form>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

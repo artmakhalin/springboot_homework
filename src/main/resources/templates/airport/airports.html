@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Airports</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form action="/airports">
+                        <label for="country"><span th:text="|#{country.country}:|"></span>
+                            <input id="country" type="text" name="country" th:value="${filter.country}">
+                        </label>
+                        <label for="city"><span th:text="|#{city.city}:|"></span>
+                            <input id="city" type="text" name="city" th:value="${filter.city}">
+                        </label>
+                        <label for="airport"><span th:text="|#{airport.code}:|"></span>
+                            <input id="airport" type="text" name="airport" th:value="${filter.airport}">
+                        </label>
+                        <div>
+                            <label for="page"><span th:text="|#{filter.page}:|"></span>
+                                <input id="page" type="number" name="page" th:value="${airports.metadata.page}">
+                            </label>
+                            <label for="size"><span th:text="|#{filter.size}:|"></span>
+                                <input id="size" type="number" name="size" th:value="${airports.metadata.size}">
+                            </label>
+                        </div>
+                        <button type="submit" th:text="#{filter.filter}"></button>
+                    </form>
+                    <br>
+                    <div th:each="airport : ${airports.content}">
+                        <a th:href="@{'/airports/' + ${airport.id}}" th:text="|${airport.id}. ${airport.code}|">Airport</a>
+                    </div>
+                    <br>
+                    <form action="/airports/create">
+                        <button type="submit" th:text="#{action.create}"></button>
+                    </form>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>
