@@ -44,6 +44,66 @@ class FlightServiceIT extends IntegrationTestBase {
     }
 
     @Test
+    void findAllByFilterOnlyYear() {
+        var filter = FlightFilter.builder()
+                                 .year(2018)
+                                 .build();
+
+        var actualResult = flightService.findAll(filter, PageRequest.of(0, 20));
+        var flightNos = actualResult.get()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getTotalElements()).isEqualTo(1L),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(jfkCdg.getFlightNo())
+        );
+    }
+
+    @Test
+    void findAllByFilterYearAndMonth() {
+        var filter = FlightFilter.builder()
+                                 .year(2023)
+                                 .month(2)
+                                 .build();
+
+        var actualResult = flightService.findAll(filter, PageRequest.of(0, 20));
+        var flightNos = actualResult.get()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getTotalElements()).isEqualTo(1L),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(ledVog.getFlightNo())
+        );
+    }
+
+    @Test
+    void findAllByCrewAndMonth() {
+        var filter = FlightFilter.builder()
+                                 .crewEmail(alex.getEmail())
+                                 .month(3)
+                                 .year(2023)
+                                 .build();
+
+        var actualResult = flightService.findAllByCrewAndMonth(filter);
+        var flightNos = actualResult.getFlights()
+                                    .stream()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getFlights()).hasSize(2),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(
+                        svoJfk.getFlightNo(),
+                        svoLed.getFlightNo()
+                ),
+                () -> assertThat(actualResult.getHours()).isEqualTo(10),
+                () -> assertThat(actualResult.getMinutes()).isEqualTo(45)
+        );
+    }
+
+    @Test
     void shouldThrowBadRequestExceptionIfInvalidFilter() {
         var filter = FlightFilter.builder()
                                  .month(5)

@@ -1,6 +1,5 @@
 package com.makhalin.springboot_homework.integration.http.controller;
 
-import com.makhalin.springboot_homework.dto.FlightFilter;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import com.makhalin.springboot_homework.mapper.FlightMapper;
 import lombok.SneakyThrows;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.makhalin.springboot_homework.dto.FlightCreateEditDto.Fields.*;
+import static com.makhalin.springboot_homework.dto.FlightFilter.Fields.departureAirport;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -35,7 +35,7 @@ class FlightControllerIT extends IntegrationTestBase {
     @SneakyThrows
     void findAll() {
         mockMvc.perform(get("/flights")
-                       .param(FlightFilter.Fields.departureAirport, "svo"))
+                       .param(departureAirport, "svo"))
                .andExpectAll(
                        status().is2xxSuccessful(),
                        view().name("flight/flights"),

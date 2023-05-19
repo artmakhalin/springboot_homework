@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Flights</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form action="/monthly">
+                        <div>
+                            <label for="month"><span th:text="|#{flight.month}:|"></span>
+                                <input id="month" type="number" name="month" min="1" max="12" th:value="${month}">
+                            </label>
+                            <label for="year"><span th:text="|#{flight.year}:|"></span>
+                                <input id="year" type="number" name="year" min="2000" max="2023" th:value="${year}">
+                            </label>
+                        </div>
+                        <button type="submit" th:text="#{filter.filter}"></button>
+                    </form>
+                    <br>
+                    <label for="totalTime"><span th:text="#{user.totalTime}"></span></label><br>
+                    <span id="totalTime" th:text="|${hours}:${minutes}|"></span><br>
+                    <label for="flights"><span th:text="#{admin.flights}"></span></label><br>
+                    <table id="flights">
+                        <tr>
+                            <th><span th:text="#{flight.flightNo}"></span></th>
+                            <th><span th:text="#{flight.departureDate}"></span></th>
+                            <th><span th:text="#{flight.departureAirport}"></span></th>
+                            <th><span th:text="#{flight.arrivalAirport}"></span></th>
+                            <th><span th:text="#{flight.hours}"></span></th>
+                            <th><span th:text="#{flight.minutes}"></span></th>
+                        </tr>
+                        <tr th:each="flight : ${flights}">
+                            <td th:text="${flight.flightNo}"></td>
+                            <td th:text="${flight.departureDate}"></td>
+                            <td th:text="${flight.departureAirport.code}"></td>
+                            <td th:text="${flight.arrivalAirport.code}"></td>
+                            <td th:text="${flight.hours}"></td>
+                            <td th:text="${flight.minutes}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

@@ -3,6 +3,8 @@ package com.makhalin.springboot_homework.service;
 import com.makhalin.springboot_homework.dto.FlightCreateEditDto;
 import com.makhalin.springboot_homework.dto.FlightReadDto;
 import com.makhalin.springboot_homework.dto.FlightFilter;
+import com.makhalin.springboot_homework.dto.MonthlyFlightsReadDto;
+import com.makhalin.springboot_homework.entity.Flight;
 import com.makhalin.springboot_homework.mapper.FlightMapper;
 import com.makhalin.springboot_homework.repository.FlightRepository;
 import com.makhalin.springboot_homework.repository.QPredicate;
@@ -21,6 +23,8 @@ import static com.makhalin.springboot_homework.exception.BadRequestException.bad
 import static com.makhalin.springboot_homework.exception.BadRequestException.badRequestException;
 import static com.makhalin.springboot_homework.exception.NotFoundException.notFound;
 import static com.makhalin.springboot_homework.exception.NotFoundException.notFoundException;
+import static com.makhalin.springboot_homework.util.FlightTimeUtil.hoursFromSec;
+import static com.makhalin.springboot_homework.util.FlightTimeUtil.minFromSec;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +64,23 @@ public class FlightService {
                                .map(flightMapper::mapRead);
     }
 
+    public MonthlyFlightsReadDto findAllByCrewAndMonth(FlightFilter filter) {
+        var flights = flightRepository.findByCrewAndMonth(filter)
+                                      .stream()
+                                      .toList();
+        var totalTime = flights.stream()
+                               .map(Flight::getTime)
+                               .mapToLong(Long::longValue)
+                               .sum();
+        return new MonthlyFlightsReadDto(
+                hoursFromSec(totalTime),
+                minFromSec(totalTime),
+                flights.stream()
+                       .map(flightMapper::mapRead)
+                       .toList()
+        );
+    }
+
     public List<FlightReadDto> findAll() {
         return flightRepository.findAll()
                                .stream()
@@ -76,29 +97,29 @@ public class FlightService {
     @Transactional
     public FlightReadDto create(FlightCreateEditDto flightDto) {
         return Optional.of(flightDto)
-                .map(flightMapper::mapCreate)
-                .map(flightRepository::save)
-                .map(flightMapper::mapRead)
-                .orElseThrow(badRequest("Error during save flight"));
+                       .map(flightMapper::mapCreate)
+                       .map(flightRepository::save)
+                       .map(flightMapper::mapRead)
+                       .orElseThrow(badRequest("Error during save flight"));
     }
 
     @Transactional
     public FlightReadDto update(Long id, FlightCreateEditDto flightDto) {
         return flightRepository.findById(id)
-                .map(entity -> flightMapper.mapUpdate(flightDto, entity))
-                .map(flightRepository::saveAndFlush)
-                .map(flightMapper::mapRead)
-                .orElseThrow(notFound("Flight not found with id " + id));
+                               .map(entity -> flightMapper.mapUpdate(flightDto, entity))
+                               .map(flightRepository::saveAndFlush)
+                               .map(flightMapper::mapRead)
+                               .orElseThrow(notFound("Flight not found with id " + id));
     }
 
     @Transactional
     public void delete(Long id) {
         flightRepository.findById(id)
-                .ifPresentOrElse(entity -> {
-                    flightRepository.delete(entity);
-                    flightRepository.flush();
-                }, () -> {
-                    throw notFoundException("Flight not found with id " + id);
-                });
+                        .ifPresentOrElse(entity -> {
+                            flightRepository.delete(entity);
+                            flightRepository.flush();
+                        }, () -> {
+                            throw notFoundException("Flight not found with id " + id);
+                        });
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.util.Set;
 
 import static com.makhalin.springboot_homework.entity.Role.ADMIN;
+import static com.makhalin.springboot_homework.entity.Role.USER;
 import static java.lang.reflect.Proxy.newProxyInstance;
 import static org.springframework.security.web.csrf.CookieCsrfTokenRepository.withHttpOnlyFalse;
 
@@ -49,6 +50,10 @@ public class SecurityConfiguration {
                                 "/flightCrew/**"
                         )
                         .hasAnyAuthority(ADMIN.getAuthority())
+                        .antMatchers(
+                                "/monthly"
+                        )
+                        .hasAnyAuthority(USER.getAuthority())
                         .anyRequest()
                         .authenticated()
                 )
