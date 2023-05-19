@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Statistics</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                </div>
+                <div class="col-sm">
+                    <div th:insert="~{fragment :: header}"></div>
+                    <div th:insert="~{fragment :: menu}"></div>
+                    <form action="/statistics">
+                        <div>
+                            <label for="year"><span th:text="|#{flight.year}:|"></span>
+                                <input id="year" type="number" name="year" min="2000" max="2023" th:value="${year}">
+                            </label>
+                        </div>
+                        <button type="submit" th:text="#{filter.filter}"></button>
+                    </form>
+                    <br>
+                    <label for="totalTime"><span th:text="#{user.yearTotalTime}"></span></label><br>
+                    <span id="totalTime" th:text="|${statisticsDto.totalTime.hours}:${statisticsDto.totalTime.minutes}|"></span><br>
+                    <label for="flights"><span th:text="#{user.statistics}"></span></label><br>
+                    <table id="flights">
+                        <tr>
+                            <th><span th:text="#{flight.month}"></span></th>
+                            <th><span th:text="#{user.monthTotalTime}"></span></th>
+                        </tr>
+                        <tr th:each="month : ${statisticsDto.statistics}">
+                            <td th:text="${month.key}"></td>
+                            <td th:text="|${month.value.hours}:${month.value.minutes}|"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm">
+                </div>
+            </div>
+        </div>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

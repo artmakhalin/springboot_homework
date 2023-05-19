@@ -45,7 +45,7 @@ public class FilterFlightRepositoryImpl implements FilterFlightRepository {
                                            startMonth -> cb.between(
                                                    flight.get(Flight_.departureDate),
                                                    startMonth,
-                                                   startMonth.plusDays(startMonth.lengthOfMonth())
+                                                   startMonth.plusDays(startMonth.lengthOfMonth() - 1)
                                            ))
                                    .getPredicateArray();
 

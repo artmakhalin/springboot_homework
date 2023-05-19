@@ -48,10 +48,10 @@ class AirportRestControllerIT extends IntegrationTestBase {
     @Test
     @SneakyThrows
     void shouldReturnNotFoundStatusIfNoAirportFound() {
-        mockMvc.perform(get("/api/v1/admin/airports/" + 555))
+        mockMvc.perform(get("/api/v1/admin/airports/" + 5555))
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Airport not found with id 555")
+                       jsonPath("$.message").value("Airport not found with id 5555")
                );
     }
 
@@ -97,7 +97,7 @@ class AirportRestControllerIT extends IntegrationTestBase {
                )
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Should contain exactly 3 letters")
+                       jsonPath("$.message").value("Should contain only 3 English letters")
                );
     }
 
@@ -119,7 +119,7 @@ class AirportRestControllerIT extends IntegrationTestBase {
                )
                .andExpectAll(
                        status().is4xxClientError(),
-                       jsonPath("$.message").value("Should contain only English letters")
+                       jsonPath("$.message").value("Should contain only 3 English letters")
                );
     }
 
