@@ -7,7 +7,6 @@ import java.util.List;
 @Value
 public class MonthlyFlightsReadDto {
 
-    Integer hours;
-    Integer minutes;
+    FlightTimeReadDto flightTime;
     List<FlightReadDto> flights;
 }

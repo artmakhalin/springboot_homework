@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Flights</title>
+        <title>Monthly Flights</title>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
     </head>
     <body>
@@ -26,8 +26,8 @@
                         <button type="submit" th:text="#{filter.filter}"></button>
                     </form>
                     <br>
-                    <label for="totalTime"><span th:text="#{user.totalTime}"></span></label><br>
-                    <span id="totalTime" th:text="|${hours}:${minutes}|"></span><br>
+                    <label for="totalTime"><span th:text="#{user.monthTotalTime}"></span></label><br>
+                    <span id="totalTime" th:text="|${flightTime.hours}:${flightTime.minutes}|"></span><br>
                     <label for="flights"><span th:text="#{admin.flights}"></span></label><br>
                     <table id="flights">
                         <tr>

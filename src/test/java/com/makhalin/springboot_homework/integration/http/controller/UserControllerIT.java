@@ -2,7 +2,6 @@ package com.makhalin.springboot_homework.integration.http.controller;
 
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
 import lombok.SneakyThrows;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +13,7 @@ import java.time.LocalDate;
 import static com.makhalin.springboot_homework.dto.FlightFilter.Fields.month;
 import static com.makhalin.springboot_homework.dto.FlightFilter.Fields.year;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -35,13 +35,12 @@ class UserControllerIT extends IntegrationTestBase {
                        .param(year, "2023"))
                .andExpectAll(
                        status().is2xxSuccessful(),
-                       view().name("crew/monthly"),
+                       view().name("user/monthly"),
                        model().attributeExists("flights"),
                        model().attribute("flights", hasSize(2)),
-                       model().attributeExists("hours"),
-                       model().attribute("hours", equalTo(10)),
-                       model().attributeExists("minutes"),
-                       model().attribute("minutes", equalTo(45))
+                       model().attributeExists("flightTime"),
+                       model().attribute("flightTime", hasProperty("hours", equalTo(10))),
+                       model().attribute("flightTime", hasProperty("minutes", equalTo(45)))
                );
     }
 
@@ -52,11 +51,43 @@ class UserControllerIT extends IntegrationTestBase {
         mockMvc.perform(get("/monthly"))
                .andExpectAll(
                        status().is2xxSuccessful(),
-                       view().name("crew/monthly"),
+                       view().name("user/monthly"),
                        model().attributeExists("month"),
-                       model().attribute("month", equalTo(LocalDate.now().getMonthValue())),
+                       model().attribute("month", equalTo(LocalDate.now()
+                                                                   .getMonthValue())),
                        model().attributeExists("year"),
-                       model().attribute("year", equalTo(LocalDate.now().getYear()))
+                       model().attribute("year", equalTo(LocalDate.now()
+                                                                  .getYear()))
+               );
+    }
+
+    @Test
+    @SneakyThrows
+    @WithMockUser(username = "alex@test.com", password = "test", authorities = {"USER"})
+    void yearStatistics() {
+        mockMvc.perform(get("/statistics")
+                       .param(year, "2023"))
+               .andExpectAll(
+                       status().is2xxSuccessful(),
+                       view().name("user/statistics"),
+                       model().attributeExists("statisticsDto"),
+                       model().attribute("statisticsDto", hasProperty("statistics")),
+                       model().attribute("statisticsDto", hasProperty("totalTime", hasProperty("hours", equalTo(17)))),
+                       model().attribute("statisticsDto", hasProperty("totalTime", hasProperty("minutes", equalTo(39))))
+               );
+    }
+
+    @Test
+    @SneakyThrows
+    @WithMockUser(username = "alex@test.com", password = "test", authorities = {"USER"})
+    void currentYearStatistics() {
+        mockMvc.perform(get("/statistics"))
+               .andExpectAll(
+                       status().is2xxSuccessful(),
+                       view().name("user/statistics"),
+                       model().attributeExists("year"),
+                       model().attribute("year", equalTo(LocalDate.now()
+                                                                  .getYear()))
                );
     }
 }

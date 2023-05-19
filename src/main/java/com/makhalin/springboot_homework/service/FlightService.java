@@ -1,9 +1,6 @@
 package com.makhalin.springboot_homework.service;
 
-import com.makhalin.springboot_homework.dto.FlightCreateEditDto;
-import com.makhalin.springboot_homework.dto.FlightReadDto;
-import com.makhalin.springboot_homework.dto.FlightFilter;
-import com.makhalin.springboot_homework.dto.MonthlyFlightsReadDto;
+import com.makhalin.springboot_homework.dto.*;
 import com.makhalin.springboot_homework.entity.Flight;
 import com.makhalin.springboot_homework.mapper.FlightMapper;
 import com.makhalin.springboot_homework.repository.FlightRepository;
@@ -15,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.makhalin.springboot_homework.entity.QFlight.flight;
 import static com.makhalin.springboot_homework.exception.BadRequestException.badRequest;
@@ -72,13 +71,36 @@ public class FlightService {
                                .map(Flight::getTime)
                                .mapToLong(Long::longValue)
                                .sum();
+        var flightTime = new FlightTimeReadDto(hoursFromSec(totalTime),
+                minFromSec(totalTime));
         return new MonthlyFlightsReadDto(
-                hoursFromSec(totalTime),
-                minFromSec(totalTime),
+                flightTime,
                 flights.stream()
                        .map(flightMapper::mapRead)
                        .toList()
         );
+    }
+
+    public YearStatisticsReadDto findStatisticsByCrewAndYear(FlightFilter filter) {
+        var result = new HashMap<Integer, FlightTimeReadDto>();
+        var totalTime = new AtomicLong(0L);
+        flightRepository.findMonthlyFlightTimeStatisticsByCrewAndYear(filter)
+                        .forEach((key, value) -> {
+                                    result.put(
+                                            key,
+                                            new FlightTimeReadDto(
+                                                    hoursFromSec(value),
+                                                    minFromSec(value)
+                                            )
+                                    );
+                                    totalTime.addAndGet(value);
+                                }
+                        );
+
+        return new YearStatisticsReadDto(result, new FlightTimeReadDto(
+                hoursFromSec(totalTime.get()),
+                minFromSec(totalTime.get())
+        ));
     }
 
     public List<FlightReadDto> findAll() {

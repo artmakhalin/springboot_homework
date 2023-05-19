@@ -38,9 +38,26 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         model.addAttribute("flights", flightsReadDto.getFlights());
-        model.addAttribute("hours", flightsReadDto.getHours());
-        model.addAttribute("minutes", flightsReadDto.getMinutes());
+        model.addAttribute("flightTime", flightsReadDto.getFlightTime());
 
-        return "crew/monthly";
+        return "user/monthly";
+    }
+
+    @GetMapping("/statistics")
+    public String yearStatistics(@AuthenticationPrincipal UserDetails userDetails,
+                                 Model model,
+                                 @RequestParam(value = "year", required = false) Integer year) {
+        if (year == null) {
+            year = LocalDate.now()
+                            .getYear();
+        }
+        var filter = FlightFilter.builder()
+                                 .crewEmail(userDetails.getUsername())
+                                 .year(year)
+                                 .build();
+        model.addAttribute("year", year);
+        model.addAttribute("statisticsDto", flightService.findStatisticsByCrewAndYear(filter));
+
+        return "user/statistics";
     }
 }

@@ -51,7 +51,8 @@ public class SecurityConfiguration {
                         )
                         .hasAnyAuthority(ADMIN.getAuthority())
                         .antMatchers(
-                                "/monthly"
+                                "/monthly",
+                                "/statistics"
                         )
                         .hasAnyAuthority(USER.getAuthority())
                         .anyRequest()
