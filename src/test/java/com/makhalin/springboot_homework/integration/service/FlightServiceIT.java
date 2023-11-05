@@ -1,8 +1,6 @@
 package com.makhalin.springboot_homework.integration.service;
 
-import com.makhalin.springboot_homework.dto.FlightCreateEditDto;
-import com.makhalin.springboot_homework.dto.FlightFilter;
-import com.makhalin.springboot_homework.dto.FlightReadDto;
+import com.makhalin.springboot_homework.dto.*;
 import com.makhalin.springboot_homework.exception.BadRequestException;
 import com.makhalin.springboot_homework.exception.NotFoundException;
 import com.makhalin.springboot_homework.integration.IntegrationTestBase;
@@ -12,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -40,6 +40,95 @@ class FlightServiceIT extends IntegrationTestBase {
                         svoVog.getFlightNo(),
                         svoCdg.getFlightNo()
                 )
+        );
+    }
+
+    @Test
+    void findAllByFilterOnlyYear() {
+        var filter = FlightFilter.builder()
+                                 .year(2018)
+                                 .build();
+
+        var actualResult = flightService.findAll(filter, PageRequest.of(0, 20));
+        var flightNos = actualResult.get()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getTotalElements()).isEqualTo(1L),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(jfkCdg.getFlightNo())
+        );
+    }
+
+    @Test
+    void findAllByFilterYearAndMonth() {
+        var filter = FlightFilter.builder()
+                                 .year(2023)
+                                 .month(2)
+                                 .build();
+
+        var actualResult = flightService.findAll(filter, PageRequest.of(0, 20));
+        var flightNos = actualResult.get()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getTotalElements()).isEqualTo(1L),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(ledVog.getFlightNo())
+        );
+    }
+
+    @Test
+    void findAllByCrewAndMonth() {
+        var filter = FlightFilter.builder()
+                                 .crewEmail(alex.getEmail())
+                                 .month(3)
+                                 .year(2023)
+                                 .build();
+
+        var actualResult = flightService.findAllByCrewAndMonth(filter);
+        var flightNos = actualResult.getFlights()
+                                    .stream()
+                                    .map(FlightReadDto::getFlightNo)
+                                    .toList();
+
+        assertAll(
+                () -> assertThat(actualResult.getFlights()).hasSize(2),
+                () -> assertThat(flightNos).containsExactlyInAnyOrder(
+                        svoJfk.getFlightNo(),
+                        svoLed.getFlightNo()
+                ),
+                () -> assertThat(actualResult.getFlightTime()
+                                             .getHours()).isEqualTo(10),
+                () -> assertThat(actualResult.getFlightTime()
+                                             .getMinutes()).isEqualTo(45)
+        );
+    }
+
+    @Test
+    void findStatisticsByCrewAndYear() {
+        var filter = FlightFilter.builder()
+                                 .crewEmail(alex.getEmail())
+                                 .year(2023)
+                                 .build();
+
+        var actualResult = flightService.findStatisticsByCrewAndYear(filter);
+        var monthTimes = actualResult.getStatistics()
+                                     .values()
+                                     .stream()
+                                     .toList();
+        var months = actualResult.getStatistics()
+                                   .keySet();
+
+        assertAll(
+                () -> assertThat(actualResult.getStatistics()).hasSize(3),
+                () -> assertThat(monthTimes).containsExactlyInAnyOrder(
+                        new FlightTimeReadDto(4, 42),
+                        new FlightTimeReadDto(2, 12),
+                        new FlightTimeReadDto(10, 45)
+                ),
+                () -> assertThat(months).containsExactlyInAnyOrder(1, 2, 3),
+                () -> assertThat(actualResult.getTotalTime()).isEqualTo(new FlightTimeReadDto(17, 39))
         );
     }
 
